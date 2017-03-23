@@ -1,6 +1,6 @@
 {
-  "name": "noderest",
-  "description": "Demo REST API with Node",
+  "name": "Tagify",
+  "description": "Project in Advanced Web Programming course TDDD27",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
