@@ -1,0 +1,16 @@
+{
+  "name": "noderest",
+  "description": "Demo REST API with Node",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "ejs": "2.5.5",
+    "express": "^4.14.0",
+    "handlebars": "^4.0.6",
+    "mysql": "^2.5.4",
+    "querystring": "^0.2.0",
+    "request": "^2.79.0"
+  }
+}

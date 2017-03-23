@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Tagify</title>
+
+	<!-- Bootstrap -->
+	<link href="../../public/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+<div class="container">
+	<h1 id="welcome">Hello, world!</h1>
+
+	<a href="/login" class="btn btn-default" type="button" id="btn">Log in to Spotify</a>
+
+	<div id="loggedin">
+		<div id="user-profile">
+		</div>
+		<div id="oauth">
+		</div>
+		<button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
+	</div>
+</div>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../../public/js/bootstrap.min.js"></script>
+
+
+
+<script id="user-profile-template" type="text/x-handlebars-template">
+	<h1>Logged in as {{display_name}}</h1>
+	<div class="media">
+		<div class="pull-left">
+			<img class="media-object" width="150" src="{{images.0.url}}" />
+		</div>
+		<div class="media-body">
+			<dl class="dl-horizontal">
+				<dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
+				<dt>Id</dt><dd>{{id}}</dd>
+				<dt>Email</dt><dd>{{email}}</dd>
+				<dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
+				<dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
+				<dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
+				<dt>Country</dt><dd>{{country}}</dd>
+			</dl>
+		</div>
+	</div>
+</script>
+
+<script id="oauth-template" type="text/x-handlebars-template">
+	<h2>oAuth info</h2>
+	<dl class="dl-horizontal">
+		<dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
+		<dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}></dd>
+	</dl>
+</script>
+
+<script>
+	(function() {
+		/**
+		 * Obtains parameters from the hash of the URL
+		 * @return Object
+		 */
+		function getHashParams() {
+			var hashParams = {};
+			var e, r = /([^&;=]+)=?([^&;]*)/g,
+				q = window.location.hash.substring(1);
+			while ( e = r.exec(q)) {
+				hashParams[e[1]] = decodeURIComponent(e[2]);
+			}
+			return hashParams;
+		}
+		var userProfileSource = document.getElementById('user-profile-template').innerHTML,
+			userProfileTemplate = Handlebars.compile(userProfileSource),
+			userProfilePlaceholder = document.getElementById('user-profile');
+		var oauthSource = document.getElementById('oauth-template').innerHTML,
+			oauthTemplate = Handlebars.compile(oauthSource),
+			oauthPlaceholder = document.getElementById('oauth');
+		var params = getHashParams();
+		var access_token = params.access_token,
+			refresh_token = params.refresh_token,
+			error = params.error;
+		if (error) {
+			alert('There was an error during the authentication');
+		} else {
+			if (access_token) {
+				// render oauth info
+				oauthPlaceholder.innerHTML = oauthTemplate({
+					access_token: access_token,
+					refresh_token: refresh_token
+				});
+				$.ajax({
+					url: 'https://api.spotify.com/v1/me',
+					headers: {
+						'Authorization': 'Bearer ' + access_token
+					},
+					success: function(response) {
+						userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+						$('#btn').hide();
+						$('#welcome').hide();
+					}
+				});
+			} else {
+				// render initial screen
+				$('#btn').show();
+				$('#welcome').show();
+			}
+			document.getElementById('obtain-new-token').addEventListener('click', function() {
+				$.ajax({
+					url: '/refresh_token',
+					data: {
+						'refresh_token': refresh_token
+					}
+				}).done(function(data) {
+					access_token = data.access_token;
+					oauthPlaceholder.innerHTML = oauthTemplate({
+						access_token: access_token,
+						refresh_token: refresh_token
+					});
+				});
+			}, false);
+		}
+	})();
+</script>
+
+<script>
+	$("#btn").click(function () {
+		alert("Clicked button");
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/head.ejs %>
+</head>
+<body>
+<% include ../partials/menu.ejs %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.js"></script>
+
+<div class="container">
+	<% if (loggedin == "true") { %>
+	<div id="placeholder">
+		<h3><%=name%></h3>
+		<p><b>Email</b></p>
+		<p><%=email%></p>
+		<p><b>Url</b></p>
+		<p><a href="<%=profile_url%>"><%=profile_url%></a></p>
+	</div>
+	<% } %>
+</div>
+</body>
+</html>

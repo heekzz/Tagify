@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/head.ejs %>
+	<link href="/css/magicsuggest.css" rel="stylesheet">
+	<script src="/js/magicsuggest.js"></script>
+
+</head>
+<body>
+<% include ../partials/menu.ejs %>
+
+
+<!-- Modal -->
+<div class="modal fade" id="spotifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Spotify Login</h4>
+			</div>
+			<div class="modal-body">
+				<p>You must login with Spotify to continue!</p>
+				<a type="button" class="btn btn-success" href="/login">Log in with Spotify</a>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div> <!-- Modal -->
+
+<div class="container">
+	<div class="input-group input-group-lg searchbargroup">
+		<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+		<input class="form-control" id="search" ></input>
+		<span class="input-group-btn">
+			<button class="btn btn-default" id="searchButton">Search</button>
+		</span>
+	</div>
+
+	<!-- Button trigger modal -->
+	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#spotifyModal">
+		Launch demo modal
+	</button>
+
+	<div id="placeholder">
+
+	</div>
+	<%=access_code%>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.js"></script>
+<script id="result" type="text/x-handlebars-template">
+	{{#playlist}}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{{user_id}}</h3>
+		</div>
+		<div class="panel-body">
+			<p><b>ID:</b> {{id}}</p>
+			<p><b>URL:</b> {{url}}</p>
+		</div>
+	</div>
+	{{/playlist}}
+</script>
+
+
+<script src="/js/searchfield.js"></script>
+
+</body>
+</html>
