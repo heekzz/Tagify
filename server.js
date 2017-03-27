@@ -1,33 +1,13 @@
-/**
- * This is an example of a basic node.js script that performs
- * the Authorization Code oAuth2 flow to authenticate against
- * the Spotify Accounts.
- *
- * For more information, read
- * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
- */
-
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var cookieParser = require('cookie-parser');
 var querystring = require('querystring');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
 var db = require('./database_adapter');
 
 var client_id = '942710b65334402c8f285a2dbb74783f'; // Your client id
 var client_secret = 'c0bf5d7b1d6640579daeeebb60979e0c'; // Your secret
 var redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
-
-// Connection to MySQL server
-var pool = mysql.createPool({
-	connectionLimit	: 20,
-	host			: 'localhost',
-	user			: 'root',
-	password		: '',
-	database		: 'Tagify',
-	debug			: false
-});
 
 
 /**
@@ -66,10 +46,21 @@ app.get('/init_db', function (req, res) {
 });
 
 app.get('/add_tag/:id/:name', function (req, res) {
-	db.insertTag(req.params.id, req.params.name);
+	db.addTag(req.params.id, req.params.name);
 	res.send("Added " +  req.params.name);
 });
 
+
+app.post('/add_playlist', function (req, res) {
+    db.addPlaylist(req.body);
+	//console.log(req.body);
+    res.send(req.body);
+});
+
+app.get('/get_playlists_by_tag/:tag', function (req, res) {
+    db.fetchPlaylistsByTag(req.params.tag);
+    res.send("maybe found");
+});
 
 app.get('/', function (req, res) {
 	console.log("Access code: " + spotify_access_token);

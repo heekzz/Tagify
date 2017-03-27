@@ -3600,7 +3600,7 @@ S2.define('select2/data/tags',[
     };
   };
 
-  Tags.prototype.insertTag = function (_, data, tag) {
+  Tags.prototype.addTag = function (_, data, tag) {
     data.unshift(tag);
   };
 
