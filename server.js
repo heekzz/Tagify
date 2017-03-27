@@ -13,6 +13,7 @@ var cookieParser = require('cookie-parser');
 var querystring = require('querystring');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var db = require('./database_adapter');
 
 var client_id = '942710b65334402c8f285a2dbb74783f'; // Your client id
 var client_secret = 'c0bf5d7b1d6640579daeeebb60979e0c'; // Your secret
@@ -58,6 +59,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
+
+app.get('/init_db', function (req, res) {
+    db.init();
+    res.send("Database Initialized");
+});
+
+app.get('/add_tag/:id/:name', function (req, res) {
+	db.insertTag(req.params.id, req.params.name);
+	res.send("Added " +  req.params.name);
+});
+
 
 app.get('/', function (req, res) {
 	console.log("Access code: " + spotify_access_token);
@@ -319,6 +331,7 @@ app.post('/getPlaylist', function (request, result) {
 
 	});
 });
+
 
 console.log('Listening on 5000');
 app.listen(5000);
