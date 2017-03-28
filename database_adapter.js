@@ -31,22 +31,20 @@ module.exports = {
         playlists.remove({playlist_id:playlist_id});
     },
 
-    // TODO: not yet implemented
     getPlaylists: function (user_id) {
-        //var cursor = db.collection('Playlists').find( {user_id:user_id});
-        //return cursor.toArray();
-
         return playlists.find({user_id:user_id}).toArray()
     },
 
-    // TODO: not yet implemented
+    // TODO: should require all tags?
     matchingPlaylists: function (tags) {
-
+        return playlists.find({tags: {$in: tags}}).toArray()
     },
 
-    // TODO: not yet implemented
+    // TODO: could be more efficient using findOne
     playlistExists: function (playlist_id) {
-
+        return playlists.find({playlist_id:playlist_id}).toArray().then(function (p){
+            return Boolean(p.length);
+        });
     },
 
     setTags: function (playlist_id, tags) {

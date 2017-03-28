@@ -59,15 +59,17 @@ app.delete('/playlist', function (req, res) {
 });
 
 // Gets all playlists of a user
-app.get('/playlist/:user_id', function (req, res) {
+app.get('/playlist/user_id/:user_id', function (req, res) {
     db.getPlaylists(req.params.user_id).then(function (playlists) {
 		res.send(playlists);
     });
 });
 
 // Gets all playlists with specific tags
-app.get('/playlist/:tags', function (req, res) {
-    res.send(db.matchingPlaylists(req.params.tags));
+app.get('/playlist/tags/:tags', function (req, res) {
+    db.matchingPlaylists(JSON.parse(req.params.tags)['tags']).then(function (playlists) {
+        res.send(playlists);
+    });
 });
 
 // Updates the tags of a playlist
@@ -94,9 +96,10 @@ app.get('/playlist/tag/:playlist_id', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-	var P = db.setTags("1234", ["hallo", "tjao"]);
-	//console.log(result);
-	res.send(P);
+    db.playlistExists("1337").then(function (b) {
+        res.send(b);
+    });
+    //res.send(db.playlistExists("1337"));
 	//console.log("Access code: " + spotify_access_token);
 	//res.render('pages/index', {access_code: spotify_access_token})
 });
