@@ -45,26 +45,27 @@ app.get('/init_db', function (req, res) {
     res.send("Database Initialized");
 });
 
-app.get('/add_tag/:id/:name', function (req, res) {
-	db.addTag(req.params.id, req.params.name);
-	res.send("Added " +  req.params.name);
-});
-
-
 app.post('/add_playlist', function (req, res) {
     db.addPlaylist(req.body);
-	//console.log(req.body);
     res.send(req.body);
 });
 
-app.get('/get_playlists_by_tag/:tag', function (req, res) {
-    db.fetchPlaylistsByTag(req.params.tag);
-    res.send("maybe found");
+app.post('/set_tags', function (req, res) {
+    db.setTags(req.body['playlist_id'], req.body['tags']);
+    res.send(req.body);
+});
+
+app.post('/add_tags', function (req, res) {
+    db.addTags(req.body['playlist_id'], req.body['tags']);
+    res.send(req.body);
 });
 
 app.get('/', function (req, res) {
-	console.log("Access code: " + spotify_access_token);
-	res.render('pages/index', {access_code: spotify_access_token})
+	var P = db.setTags("1234", ["hallo", "tjao"]);
+	//console.log(result);
+	res.send(P);
+	//console.log("Access code: " + spotify_access_token);
+	//res.render('pages/index', {access_code: spotify_access_token})
 });
 
 app.get('/add', function (req, res) {
