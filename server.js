@@ -278,58 +278,12 @@ app.get('/tags', function(request, result) {
 });
 
 app.post('/getPlaylist', function (request, result) {
-	console.log('Request to /getPlaylist');
 	var tags = request.body;
-	console.log(tags);
-	for (var i = 0; i < tags.length; i++) {
-		console.log(tags[i]);
-	}
-	var query = "SELECT * FROM Playlists p WHERE p.id IN (" +
-		"SELECT  pt.playlist" +
-		" FROM Playlist_Tag pt" +
-		" INNER JOIN Tags t ON pt.tag = t.id" +
-		" WHERE t.tag IN (";
-	for (var x = 0; x < tags.length; x++) {
-		query += "'" + tags[x] + "'";
-		if (x != tags.length-1) {
-			query += ",";
-		}
-	}
 
-	query += ") GROUP BY pt.playlist HAVING COUNT(DISTINCT pt.tag) = " + tags.length + ");";
-	console.log("SQL-Query: " + query);
-
-	var data = null;
-	pool.getConnection(function (err, connection) {
-		if (err) {
-			result.json({"code" : 100, "status" : "Error in connection database", "error" : err});
-			return;
-		}
-
-		console.log("Connected as id " + connection.threadId);
-
-		// Execute SQL query
-		connection.query(query, function (err, rows) {
-			connection.release();
-			if (!err) {
-				data = rows;
-				console.log(JSON.stringify(data));
-				var obj = {"playlist" : data};
-				result.json(obj);
-			} else {
-				console.error("Error during SQL query execution", err);
-				result.json({"code": 100, "status": "Error in sql query", "error": err});
-			}
-		});
-
-		// If error occur
-		connection.on('error', function(err) {
-			console.error("Error during SQL query execution", err);
-			result.json({"code" : 100, "status" : "Error in connection database", "error" : err});
-			return;
-		});
-
-	});
+    db.matchingPlaylists(tags).then(function (playlists) {
+        var obj = {"playlist" : playlists};
+        result.json(obj);
+    });
 });
 
 
