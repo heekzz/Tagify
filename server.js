@@ -60,7 +60,9 @@ app.delete('/playlist', function (req, res) {
 
 // Gets all playlists of a user
 app.get('/playlist/:user_id', function (req, res) {
-    res.send(db.getPlaylists(req.params.user_id));
+    db.getPlaylists(req.params.user_id).then(function (playlists) {
+		res.send(playlists);
+    });
 });
 
 // Gets all playlists with specific tags
@@ -87,7 +89,7 @@ app.delete('/playlist/tag', function (req, res) {
 });
 
 // Gets all tags of a playlist
-app.get('/playlist/:playlist_id', function (req, res) {
+app.get('/playlist/tag/:playlist_id', function (req, res) {
     res.send(db.getTags(req.params.playlist_id));
 });
 
@@ -356,5 +358,6 @@ app.post('/getPlaylist', function (request, result) {
 });
 
 
+db.init();
 console.log('Listening on 5000');
 app.listen(5000);
