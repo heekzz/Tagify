@@ -51,6 +51,12 @@ app.post('/playlist', function (req, res) {
     res.send(req.body);
 });
 
+// Delete a playlist
+app.delete('/playlist', function (req, res) {
+    db.deletePlaylist(req.body['playlist_id']);
+    res.send(req.body);
+});
+
 // Update the tags of a playlist
 app.put('/playlist/tag', function (req, res) {
     db.setTags(req.body['playlist_id'], req.body['tags']);
@@ -58,7 +64,7 @@ app.put('/playlist/tag', function (req, res) {
 });
 
 // Add tags to a playlist
-app.patch('/playlist/tag', function (req, res) {
+app.post('/playlist/tag', function (req, res) {
     db.addTags(req.body['playlist_id'], req.body['tags']);
     res.send(req.body);
 });

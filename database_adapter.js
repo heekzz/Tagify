@@ -30,6 +30,15 @@ module.exports = {
         });
     },
 
+    deletePlaylist: function (playlist_id) {
+        MongoClient.connect(conn, function (err, db) {
+            if (err) return console.dir(err);
+            else console.log('Established connection to ', conn);
+
+            db.collection('Playlists').remove({playlist_id:playlist_id});
+        });
+    },
+
     setTags: function (playlist_id, tags) {
         MongoClient.connect(conn, function (err, db) {
             if (err) return console.dir(err);
