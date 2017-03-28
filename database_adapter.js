@@ -14,19 +14,18 @@ module.exports = {
                 console.log('Established connection to ', conn);
             }
 
-            db.createCollection('Playlists', {strict: true}, function (err, collection) {
-            });
+            db.createCollection('Playlists', {strict: true}, function (err, collection) {});
 
             playlists = db.collection('Playlists');
+
+            playlists.createIndex({playlist_id:1},{unique:true});
         });
     },
 
-    // TODO: should not add duplicate playlists
     addPlaylist: function (playlist) {
         playlists.insert(playlist);
     },
 
-    // TODO: should check if the playlist exists
     removePlaylist: function (playlist_id) {
         playlists.remove({playlist_id:playlist_id});
     },
@@ -57,9 +56,8 @@ module.exports = {
         playlists.update({playlist_id:playlist_id}, {$set: {tags:tags}});
     },
 
-    // TODO: should not add duplicate tags
     addTags: function (playlist_id, tags) {
-        playlists.update({playlist_id:playlist_id}, {$push: {tags: {$each: tags}}});
+        playlists.update({playlist_id:playlist_id}, {$addToSet: {tags: {$each: tags}}});
     },
 
     removeTags: function (playlist_id, tags) {
