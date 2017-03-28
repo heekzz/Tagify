@@ -98,12 +98,8 @@ app.get('/playlist/tag/:playlist_id', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-    db.playlistExists("1337").then(function (b) {
-        res.send(b);
-    });
-    //res.send(db.playlistExists("1337"));
-	//console.log("Access code: " + spotify_access_token);
-	//res.render('pages/index', {access_code: spotify_access_token})
+	console.log("Access code: " + spotify_access_token);
+	res.render('pages/index', {access_code: spotify_access_token})
 });
 
 app.get('/add', function (req, res) {
@@ -270,40 +266,14 @@ app.get('/refresh_token', function(req, res) {
 });
 
 app.get('/tags', function(request, result) {
-	console.log("Request to /tags");
-	var tag = request.query.tag;
-	var query = "SELECT * FROM Tags WHERE tag LIKE '" + tag + "\%';";
-	var data = null;
-	console.log("Query: " + query);
-
-	pool.getConnection(function (err, connection) {
-		if (err) {
-			result.json({"code" : 100, "status" : "Error in connection database"});
-			return;
-		}
-
-		console.log("Connected as id " + connection.threadId);
-
-		// Execute SQL query
-		connection.query(query, function (err, rows) {
-			connection.release();
-			if (!err) {
-				data = rows;
-				console.log(JSON.stringify(data));
-				result.json(data);
-			} else {
-				console.error("Error during SQL query execution", err);
-				result.json({"code": 100, "status": "Error in sql query", "error": err});
-			}
-		});
-
-		// If error occur
-		connection.on('error', function(err) {
-			console.error("Error during SQL query execution", err);
-			result.json({"code" : 100, "status" : "Error in connection database", "error" : err});
-			return;
-		});
-
+   	db.getAllTags().then(function (tags) {
+        var tag = request.query.tag;
+   		var data = [];
+        tags.forEach(function(entry) {
+            if(entry.startsWith(tag))
+            	data.push(entry);
+        });
+        result.json(data);
 	});
 });
 

@@ -68,5 +68,10 @@ module.exports = {
         return playlists.findOne({playlist_id:playlist_id}).then(function (p){
             return p['tags'];
         });
+    },
+
+    // TODO: should have a limit!
+    getAllTags: function () {
+        return playlists.distinct("tags");
     }
 };
