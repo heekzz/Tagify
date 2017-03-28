@@ -66,10 +66,11 @@ module.exports = {
     removeTags: function (playlist_id, tags) {
 
     },
-
-    // TODO: not yet implemented
+    
     getTags: function (playlist_id) {
-
+        return playlists.findOne({playlist_id:playlist_id}).then(function (p){
+            return p['tags'];
+        });
     },
 
     /*addTags: function (playlist_id, tags) {

@@ -66,7 +66,7 @@ app.get('/playlist/user_id/:user_id', function (req, res) {
 });
 
 // Gets all playlists with specific tags
-app.get('/playlist/tags/:tags', function (req, res) {
+app.get('/playlist/search/:tags', function (req, res) {
     db.matchingPlaylists(JSON.parse(req.params.tags)['tags']).then(function (playlists) {
         res.send(playlists);
     });
@@ -92,7 +92,9 @@ app.delete('/playlist/tag', function (req, res) {
 
 // Gets all tags of a playlist
 app.get('/playlist/tag/:playlist_id', function (req, res) {
-    res.send(db.getTags(req.params.playlist_id));
+    db.getTags(req.params.playlist_id).then(function (tags) {
+        res.send(tags);
+    });
 });
 
 app.get('/', function (req, res) {
