@@ -62,30 +62,13 @@ module.exports = {
         playlists.update({playlist_id:playlist_id}, {$push: {tags: {$each: tags}}});
     },
 
-    // TODO: not yet implemented
     removeTags: function (playlist_id, tags) {
-
+        playlists.update({playlist_id:playlist_id}, {$pull: {tags: {$in : tags}}});
     },
-    
+
     getTags: function (playlist_id) {
         return playlists.findOne({playlist_id:playlist_id}).then(function (p){
             return p['tags'];
         });
-    },
-
-    /*addTags: function (playlist_id, tags) {
-        MongoClient.connect(conn, function (err, db) {
-            if (err) return console.dir(err);
-            else console.log('Established connection to ', conn);
-
-            var Playlists = db.collection('Playlists');
-
-            var P = Playlists.findOne(
-                { },
-                { playlist_id:playlist_id}
-            );
-
-            console.log(P);
-        });
-    }*/
+    }
 };
