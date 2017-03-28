@@ -45,17 +45,20 @@ app.get('/init_db', function (req, res) {
     res.send("Database Initialized");
 });
 
-app.post('/add_playlist', function (req, res) {
+// Add a new playlist
+app.post('/playlist', function (req, res) {
     db.addPlaylist(req.body);
     res.send(req.body);
 });
 
-app.post('/set_tags', function (req, res) {
+// Update the tags of a playlist
+app.put('/playlist/tag', function (req, res) {
     db.setTags(req.body['playlist_id'], req.body['tags']);
     res.send(req.body);
 });
 
-app.post('/add_tags', function (req, res) {
+// Add tags to a playlist
+app.patch('/playlist/tag', function (req, res) {
     db.addTags(req.body['playlist_id'], req.body['tags']);
     res.send(req.body);
 });

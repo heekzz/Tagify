@@ -26,7 +26,7 @@ module.exports = {
             if (err) return console.dir(err);
             else console.log('Established connection to ', conn);
 
-            db.collection('Playlists'.insert(playlist));
+            db.collection('Playlists').insert(playlist);
         });
     },
 
@@ -37,7 +37,6 @@ module.exports = {
 
             //Must always be of type array, even if empty or length = 1
             //TODO: should not allow multidimensional arrays
-            console.log(tags);
             if(!tags.isArray)
                 if(tags.length === 0) tags = [];
                 else tags = [tags];
