@@ -21,6 +21,7 @@ module.exports = {
         });
     },
 
+    // TODO: should not add duplicate playlists
     addPlaylist: function (playlist) {
         MongoClient.connect(conn, function (err, db) {
             if (err) return console.dir(err);
@@ -30,12 +31,43 @@ module.exports = {
         });
     },
 
-    deletePlaylist: function (playlist_id) {
+    // TODO: should check if the playlist exists
+    removePlaylist: function (playlist_id) {
         MongoClient.connect(conn, function (err, db) {
             if (err) return console.dir(err);
             else console.log('Established connection to ', conn);
 
             db.collection('Playlists').remove({playlist_id:playlist_id});
+        });
+    },
+
+    // TODO: not yet implemented
+    getPlaylists: function (user_id) {
+        MongoClient.connect(conn, function (err, db) {
+            if (err) return console.dir(err);
+            else console.log('Established connection to ', conn);
+
+
+        });
+    },
+
+    // TODO: not yet implemented
+    matchingPlaylists: function (tags) {
+        MongoClient.connect(conn, function (err, db) {
+            if (err) return console.dir(err);
+            else console.log('Established connection to ', conn);
+
+
+        });
+    },
+
+    // TODO: not yet implemented
+    playlistExists: function (playlist_id) {
+        MongoClient.connect(conn, function (err, db) {
+            if (err) return console.dir(err);
+            else console.log('Established connection to ', conn);
+
+
         });
     },
 
@@ -54,55 +86,50 @@ module.exports = {
         });
     },
 
+    // TODO: should not add duplicate tags
     addTags: function (playlist_id, tags) {
         MongoClient.connect(conn, function (err, db) {
             if (err) return console.dir(err);
             else console.log('Established connection to ', conn);
 
-            console.log(tags);
             db.collection('Playlists').update({playlist_id:playlist_id}, {$push: {tags: {$each: tags}}});
         });
-    }
+    },
 
-    /*addTags: function (playlist_id, tags) {
+    // TODO: not yet implemented
+    removeTags: function (playlist_id, tags) {
         MongoClient.connect(conn, function (err, db) {
             if (err) return console.dir(err);
             else console.log('Established connection to ', conn);
 
-            var Playlists = db.collection('Playlists');
 
-            var P = Playlists.findOne(
-                { },
-                { playlist_id:playlist_id}
-            );
-
-            console.log(P);
         });
-    }*/
+    },
 
-    //TODO: removeTag: function(playlist_id){}
-    //TODO: getTags: function(playlist_id){}
-    //TODO: getPlaylists: function(tag){}
-    //TODO: getPlaylists: function(tags){}
-    //TODO: playlistExists: function(playlist_id) {return boolean}
+    // TODO: not yet implemented
+    getTags: function (playlist_id) {
+        MongoClient.connect(conn, function (err, db) {
+            if (err) return console.dir(err);
+            else console.log('Established connection to ', conn);
+
+
+        });
+    }
 };
 
 
-/*getPlaylists: function (user_id) {
+/*addTags: function (playlist_id, tags) {
  MongoClient.connect(conn, function (err, db) {
  if (err) return console.dir(err);
  else console.log('Established connection to ', conn);
 
  var Playlists = db.collection('Playlists');
 
- Playlists.find({user_id: user_id}).toArray(function (err, result) {
- if (err) {
- console.log(err);
- } else if (result.length) {
- console.log(result);
- } else {
- console.log('No document(s) found with defined "find" criteria!');
- }
+ var P = Playlists.findOne(
+ { },
+ { playlist_id:playlist_id}
+ );
+
+ console.log(P);
  });
- });
- },*/
+ }*/

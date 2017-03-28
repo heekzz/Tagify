@@ -40,12 +40,13 @@ app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
 
+// Initializes database and creates collections
 app.get('/init_db', function (req, res) {
     db.init();
     res.send("Database Initialized");
 });
 
-// Add a new playlist
+// Adds a new playlist
 app.post('/playlist', function (req, res) {
     db.addPlaylist(req.body);
     res.send(req.body);
@@ -53,20 +54,41 @@ app.post('/playlist', function (req, res) {
 
 // Delete a playlist
 app.delete('/playlist', function (req, res) {
-    db.deletePlaylist(req.body['playlist_id']);
+    db.removePlaylist(req.body['playlist_id']);
     res.send(req.body);
 });
 
-// Update the tags of a playlist
+// Gets all playlists of a user
+app.get('/playlist/:user_id', function (req, res) {
+    res.send(db.getPlaylists(req.params.user_id));
+});
+
+// Gets all playlists with specific tags
+app.get('/playlist/:tags', function (req, res) {
+    res.send(db.matchingPlaylists(req.params.tags));
+});
+
+// Updates the tags of a playlist
 app.put('/playlist/tag', function (req, res) {
     db.setTags(req.body['playlist_id'], req.body['tags']);
     res.send(req.body);
 });
 
-// Add tags to a playlist
+// Adds tags to a playlist
 app.post('/playlist/tag', function (req, res) {
     db.addTags(req.body['playlist_id'], req.body['tags']);
     res.send(req.body);
+});
+
+// Removes tags to a playlist
+app.delete('/playlist/tag', function (req, res) {
+    db.removeTags(req.body['playlist_id'], req.body['tags']);
+    res.send(req.body);
+});
+
+// Gets all tags of a playlist
+app.get('/playlist/:playlist_id', function (req, res) {
+    res.send(db.getTags(req.params.playlist_id));
 });
 
 app.get('/', function (req, res) {
