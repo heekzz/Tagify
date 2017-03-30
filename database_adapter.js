@@ -47,7 +47,6 @@ module.exports = {
     },
 
     setTags: function (id, tags) {
-        console.log(tags);
         //Must always be of type array, even if empty or length = 1
         //TODO: should not allow multidimensional arrays
         if(!tags.isArray)

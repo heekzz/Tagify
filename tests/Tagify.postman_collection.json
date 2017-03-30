@@ -110,7 +110,7 @@
 		{
 			"name": "http://127.0.0.1:5000/playlist",
 			"request": {
-				"url": "http://127.0.0.1:5000/playlist/emil",
+				"url": "http://127.0.0.1:5000/playlist/user_id/emil",
 				"method": "GET",
 				"header": [
 					{
@@ -150,7 +150,7 @@
 		{
 			"name": "http://127.0.0.1:5000/playlist/tag/:id",
 			"request": {
-				"url": "http://127.0.0.1:5000/playlist/tags/{\"tags\": [\"rock\",\"pop\"]}",
+				"url": "http://127.0.0.1:5000/playlist/search/{\"tags\": [\"rock\",\"pop\"]}",
 				"method": "GET",
 				"header": [
 					{
