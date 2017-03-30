@@ -54,7 +54,7 @@ app.post('/playlist', function (req, res) {
 
 // Delete a playlist
 app.delete('/playlist', function (req, res) {
-    db.removePlaylist(req.body['playlist_id']);
+    db.removePlaylist(req.body['id']);
     res.send(req.body);
 });
 
@@ -74,25 +74,25 @@ app.get('/playlist/search/:tags', function (req, res) {
 
 // Updates the tags of a playlist
 app.put('/playlist/tag', function (req, res) {
-    db.setTags(req.body['playlist_id'], req.body['tags']);
+    db.setTags(req.body['id'], req.body['tags']);
     res.send(req.body);
 });
 
 // Adds tags to a playlist
 app.post('/playlist/tag', function (req, res) {
-    db.addTags(req.body['playlist_id'], req.body['tags']);
+    db.addTags(req.body['id'], req.body['tags']);
     res.send(req.body);
 });
 
 // Removes tags to a playlist
 app.delete('/playlist/tag', function (req, res) {
-    db.removeTags(req.body['playlist_id'], req.body['tags']);
+    db.removeTags(req.body['id'], req.body['tags']);
     res.send(req.body);
 });
 
 // Gets all tags of a playlist
-app.get('/playlist/tag/:playlist_id', function (req, res) {
-    db.getTags(req.params.playlist_id).then(function (tags) {
+app.get('/playlist/tag/:id', function (req, res) {
+    db.getTags(req.params.id).then(function (tags) {
         res.send(tags);
     });
 });

@@ -26,8 +26,8 @@ module.exports = {
         playlists.insert(playlist);
     },
 
-    removePlaylist: function (playlist_id) {
-        playlists.remove({playlist_id:playlist_id});
+    removePlaylist: function (id) {
+        playlists.remove({id:id});
     },
 
     getPlaylists: function (user_id) {
@@ -40,32 +40,32 @@ module.exports = {
     },
 
     // TODO: could be more efficient using findOne
-    playlistExists: function (playlist_id) {
-        return playlists.find({playlist_id:playlist_id}).toArray().then(function (p){
+    playlistExists: function (id) {
+        return playlists.find({id:id}).toArray().then(function (p){
             return Boolean(p.length);
         });
     },
 
-    setTags: function (playlist_id, tags) {
+    setTags: function (id, tags) {
         //Must always be of type array, even if empty or length = 1
         //TODO: should not allow multidimensional arrays
         if(!tags.isArray)
             if(tags.length === 0) tags = [];
             else tags = [tags];
 
-        playlists.update({playlist_id:playlist_id}, {$set: {tags:tags}});
+        playlists.update({id:id}, {$set: {tags:tags}});
     },
 
-    addTags: function (playlist_id, tags) {
-        playlists.update({playlist_id:playlist_id}, {$addToSet: {tags: {$each: tags}}});
+    addTags: function (id, tags) {
+        playlists.update({id:id}, {$addToSet: {tags: {$each: tags}}});
     },
 
-    removeTags: function (playlist_id, tags) {
-        playlists.update({playlist_id:playlist_id}, {$pull: {tags: {$in : tags}}});
+    removeTags: function (id, tags) {
+        playlists.update({id:id}, {$pull: {tags: {$in : tags}}});
     },
 
-    getTags: function (playlist_id) {
-        return playlists.findOne({playlist_id:playlist_id}).then(function (p){
+    getTags: function (id) {
+        return playlists.findOne({id:id}).then(function (p){
             return p['tags'];
         });
     },
