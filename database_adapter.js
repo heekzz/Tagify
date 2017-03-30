@@ -47,13 +47,15 @@ module.exports = {
     },
 
     setTags: function (id, tags) {
+        console.log(tags);
         //Must always be of type array, even if empty or length = 1
         //TODO: should not allow multidimensional arrays
         if(!tags.isArray)
             if(tags.length === 0) tags = [];
-            else tags = [tags];
+        else if(typeof tags === 'string')
+            tags = [tags];
 
-        playlists.update({id:id}, {$set: {tags:tags}});
+        playlists.update({id:id}, {$set: {tags: tags}});
     },
 
     addTags: function (id, tags) {
