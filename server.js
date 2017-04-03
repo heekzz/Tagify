@@ -31,14 +31,20 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'))
 	.use(cookieParser());
-app.use(express.static(__dirname + '/views/pages/'))
-	.use(cookieParser());
+// app.use(express.static(__dirname + '/views'))
+// 	.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
+app.set('views', './views');
+
+app.get('/', function (req, res) {
+    console.log("Access code: " + spotify_access_token);
+    res.render('index')
+});
 
 // Initializes database and creates collections
 app.get('/init_db', function (req, res) {
@@ -97,10 +103,6 @@ app.get('/playlist/tag/:id', function (req, res) {
     });
 });
 
-app.get('/', function (req, res) {
-	console.log("Access code: " + spotify_access_token);
-	res.render('pages/index', {access_code: spotify_access_token})
-});
 
 app.get('/add', function (req, res) {
 	var options = {
