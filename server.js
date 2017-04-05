@@ -40,6 +40,7 @@ app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
 
+// TODO: should be removed
 // Initializes database and creates collections
 app.get('/init_db', function (req, res) {
     db.init();
