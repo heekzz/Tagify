@@ -11,6 +11,8 @@
     "handlebars": "^4.0.6",
     "jasmine": "^2.5.3",
     "karma": "^1.6.0",
+    "karma-jasmine": "^1.1.0",
+    "mocha": "^3.2.0",
     "mongodb": "^2.2.25",
     "mongoose": "^4.9.2",
     "mysql": "^2.5.4",
@@ -19,5 +21,8 @@
   },
   "scripts": {
     "start": "node server.js"
+  },
+  "devDependencies": {
+    "karma-chrome-launcher": "^2.0.0"
   }
 }

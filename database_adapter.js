@@ -21,6 +21,11 @@ module.exports = {
             playlists.createIndex({playlist_id:1},{unique:true});
         });
     },
+    
+    drop: function () {
+        if(typeof playlists !== "undefined")
+            playlists.drop();
+    },
 
     addPlaylist: function (playlist) {
         playlists.insert(playlist);
