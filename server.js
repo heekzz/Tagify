@@ -31,14 +31,18 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'))
 	.use(cookieParser());
-app.use(express.static(__dirname + '/views/pages/'))
-	.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
+app.set('views', './views');
+
+app.get('/', function (req, res) {
+    console.log("Access code: " + spotify_access_token);
+    res.render('index')
+});
 
 // Initializes database and creates collections
 app.get('/init_db', function (req, res) {
@@ -98,23 +102,6 @@ app.get('/playlist/tag/:id', function (req, res) {
     });
 });
 
-// Gets all tags
-app.get('/tags', function(request, result) {
-    db.getAllTags().then(function (tags) {
-        var tag = request.query.tag;
-        var data = [];
-        tags.forEach(function(entry) {
-            if(entry.startsWith(tag))
-                data.push(entry);
-        });
-        result.json(data);
-    });
-});
-
-app.get('/', function (req, res) {
-	console.log("Access code: " + spotify_access_token);
-	res.render('pages/index', {access_code: spotify_access_token})
-});
 
 app.get('/add', function (req, res) {
 	var options = {
@@ -276,6 +263,20 @@ app.get('/refresh_token', function(req, res) {
 				'access_token': access_token
 			});
 		}
+	});
+});
+
+app.get('/tags', function(request, result) {
+   	db.getAllTags().then(function (tags) {
+        let tag = request.query.tag;
+   		let data = [];
+        tags.forEach(function(entry) {
+            if(entry.startsWith(tag)) {
+            	let i = Math.random() * 10000000000000000;
+            	data.push({id:i, tag:entry});
+			}
+        });
+        result.json(data);
 	});
 });
 
