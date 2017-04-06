@@ -53,31 +53,32 @@ $(function() {
 	});
 
 	$('#searchButton').click(function () {
-		console.log(JSON.stringify(ms.getSelection()));
-		var index, data = ms.getSelection(), tags = [];
-		for (index = 0; index < data.length; index++) {
-			console.log(data[index].tag);
-			tags.push(data[index].tag);
-			console.log("added tags:" + tags);
-			console.log("JSON Tags: " + JSON.stringify(tags))
-		}
-		if (tags.length > 0) {
-			$.ajax({
-				type: 'POST',
-				url: '/getPlaylist',
-				data: JSON.stringify(tags),
-				dataType: 'json',
-				contentType: 'application/json',
-				success: function(data) {
-					var source   = $("#result").html();
-					var template = Handlebars.compile(source);
-					console.log(template(data));
-					$('#placeholder').html(template(data));
-				}
-			});
-		}
-
+        search();
 	});
+
+	function search() {
+        console.log(JSON.stringify(ms.getSelection()));
+        var index, data = ms.getSelection(), tags = [];
+        for (index = 0; index < data.length; index++) {
+            console.log(data[index].tag);
+            tags.push(data[index].tag);
+            console.log("added tags:" + tags);
+            console.log("JSON Tags: " + JSON.stringify(tags))
+        }
+        if (tags.length > 0) {
+            var data = {"tags":tags};
+            console.log("arg: " +  JSON.stringify(data));
+            $.ajax({
+                type: 'GET',
+                url: '/playlist/search/'+ JSON.stringify(data),
+                success: function(data) {
+                    var source   = $("#result").html()
+                    var template = Handlebars.compile(source);
+                    $('#placeholder').html(template(data));
+                }
+            });
+        }
+    }
 });
 
 

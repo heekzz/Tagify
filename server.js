@@ -68,7 +68,8 @@ app.get('/playlist/user_id/:user_id', function (req, res) {
 // Gets all playlists with specific tags
 app.get('/playlist/search/:tags', function (req, res) {
     db.matchingPlaylists(JSON.parse(req.params.tags)['tags']).then(function (playlists) {
-        res.send(playlists);
+        var obj = {"playlist" : playlists};
+        res.send(obj);
     });
 });
 
@@ -158,7 +159,7 @@ app.get('/loggedin', function (req, res) {
 	});
 
 
-})
+});
 
 app.get('/login', function(req, res) {
 
@@ -275,15 +276,6 @@ app.get('/tags', function(request, result) {
         });
         result.json(data);
 	});
-});
-
-app.post('/getPlaylist', function (request, result) {
-	var tags = request.body;
-
-    db.matchingPlaylists(tags).then(function (playlists) {
-        var obj = {"playlist" : playlists};
-        result.json(obj);
-    });
 });
 
 
