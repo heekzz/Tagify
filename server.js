@@ -98,6 +98,19 @@ app.get('/playlist/tag/:id', function (req, res) {
     });
 });
 
+// Gets all tags
+app.get('/tags', function(request, result) {
+    db.getAllTags().then(function (tags) {
+        var tag = request.query.tag;
+        var data = [];
+        tags.forEach(function(entry) {
+            if(entry.startsWith(tag))
+                data.push(entry);
+        });
+        result.json(data);
+    });
+});
+
 app.get('/', function (req, res) {
 	console.log("Access code: " + spotify_access_token);
 	res.render('pages/index', {access_code: spotify_access_token})
@@ -265,19 +278,6 @@ app.get('/refresh_token', function(req, res) {
 		}
 	});
 });
-
-app.get('/tags', function(request, result) {
-   	db.getAllTags().then(function (tags) {
-        var tag = request.query.tag;
-   		var data = [];
-        tags.forEach(function(entry) {
-            if(entry.startsWith(tag))
-            	data.push(entry);
-        });
-        result.json(data);
-	});
-});
-
 
 db.init();
 console.log('Listening on 5000');

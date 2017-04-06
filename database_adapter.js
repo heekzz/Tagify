@@ -18,7 +18,7 @@ module.exports = {
 
             playlists = db.collection('Playlists');
 
-            playlists.createIndex({playlist_id:1},{unique:true});
+            playlists.createIndex({url:1},{unique:true});
         });
     },
 
