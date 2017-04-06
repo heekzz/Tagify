@@ -269,11 +269,13 @@ app.get('/refresh_token', function(req, res) {
 
 app.get('/tags', function(request, result) {
    	db.getAllTags().then(function (tags) {
-        var tag = request.query.tag;
-   		var data = [];
+        let tag = request.query.tag;
+   		let data = [];
         tags.forEach(function(entry) {
-            if(entry.startsWith(tag))
-            	data.push(entry);
+            if(entry.startsWith(tag)) {
+            	let i = Math.random() * 10000000000000000;
+            	data.push({id:i, tag:entry});
+			}
         });
         result.json(data);
 	});
