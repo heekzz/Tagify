@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
-var conn = "mongodb://localhost:27017/Tagify";
+var conn = "mongodb://tagify:EDji04Y7Hb1q@mongodb.fredrikhakansson.se:27017/Tagify?authMechanism=DEFAULT&authSource=admin";
 var playlists, tags;
 
 
