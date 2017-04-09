@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 var conn = "mongodb://localhost:27017/Tagify";
-var playlists;
+var playlists, tags;
 
 
 module.exports = {
@@ -15,10 +15,13 @@ module.exports = {
             }
 
             db.createCollection('Playlists', {strict: true}, function (err, collection) {});
+            db.createCollection('Tags', {strict: true}, function (err, collection) {});
 
             playlists = db.collection('Playlists');
-
             playlists.createIndex({url:1},{unique:true});
+
+            tags = db.collection('Tags');
+            tags.createIndex({tag:1},{unique:true});
         });
     },
 
