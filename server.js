@@ -97,7 +97,7 @@ app.delete('/playlist/tag', function (req, res) {
 
 // Gets all tags of a playlist
 app.get('/playlist/tag/:id', function (req, res) {
-    db.getTags(req.params.id).then(function (tags) {
+    db.getTagsOfPlaylist(req.params.id).then(function (tags) {
         res.send(tags);
     });
 });
@@ -267,17 +267,13 @@ app.get('/refresh_token', function(req, res) {
 });
 
 app.get('/tags', function(request, result) {
-   	db.getAllTags().then(function (tags) {
-        let tag = request.query.tag;
-   		let data = [];
-        tags.forEach(function(entry) {
-            if(entry.startsWith(tag)) {
-            	let i = Math.random() * 10000000000000000;
-            	data.push({id:i, tag:entry});
-			}
-        });
-        result.json(data);
-	});
+    //let tag = request.query.tag;
+   	/*db.getAllTags("").then(function (tags) {
+        result.json(tags);
+	});*/
+
+   	var tags = db.getAllTags("");
+   	result.send(JSON.stringify(tags));
 });
 
 db.init();
