@@ -1,11 +1,47 @@
 # Tagify
-[![Build Status](https://travis-ci.com/heekzz/Tagify.svg?token=5ohCHEZXVjSFxxcZAkdP&branch=master)](https://travis-ci.com/heekzz/Tagify)
 
 *Authors:* Emil Gustafsson (emigu059@student.liu.se) & Fredrik Håkansson (freha309@student.liu.se)
 
-## Usage instructions
+
+## Functional specification
+Our project idea is to enable tagging of your own Spotify playlists. Through this, 
+we enable other users to search and follow your playlists, filtered on tags. The tags can be anything from genres to moods or special occasions. 
+
+## Technological specification
+When choosing our frameworks for the project, we wanted modern tools that we haven't played with before. We also wanted to use JavaScript through the whole stack for enabling a uniform project design. 
+
+
+### Front end
+* [React](https://facebook.github.io/react/)
+	* Simple and modern, used widely. Powerful and fast
+* [Bootstrap](http://getbootstrap.com/)
+	* Simplify and adding responsive design
+
+### Back end
+* [Node.js](https://nodejs.org/en/)
+	* Lightweight, JavaScript through the whole stack
+* [Passport](http://passportjs.org/)
+	* Middleware for authenticating towards external API's. Lets us ignore handling of password and other credentials
+
+### Database
+* [MongoDB](https://www.mongodb.com/)
+	* Scalable, modern and new to us. Also uses JSON which is highly compatible with JavaScript 
+
+
+### Testing
+* [Karma](https://karma-runner.github.io/1.0/index.html)
+	* Enables more readable tests using Jasmine and Mocha 
+
+
+### Deployment and CI
+* [Jenkins](https://jenkins.io/)
+	* Common used and customizable CI system. Fairly familiar to us
+* Project is hosted at http://tagify.fredrikhakansson.se 
+
+
+# Usage instructions
 Download or clone repo. You need `npm` installed to run
-```javascript
+```bash
 git clone https://github.com/heekzz/Tagify.git
 cd Tagify
 npm install
