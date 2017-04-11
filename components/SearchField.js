@@ -6,7 +6,6 @@ import Select from 'react-select';
 import fetch from 'isomorphic-fetch';
 import PlaylistResult from './PlaylistResult';
 
-var playlists = [];
 
 var SearchField = React.createClass ({
 	displayName: 'SearchField',
@@ -62,9 +61,7 @@ var SearchField = React.createClass ({
 			});
 	},
 	render () {
-		console.log("Current playlists to display:");
 		let pl =  this.state.playlists;
-		console.log(pl);
 		return (
 			<div className="section">
 				{/* Search field component */}
