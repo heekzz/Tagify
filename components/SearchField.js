@@ -39,7 +39,7 @@ var SearchField = React.createClass ({
     render () {
         return (
             <div className="section">
-                <Select.Async multi={this.state.multi} value={this.state.value} onChange={this.onChange} valueKey="id" labelKey="tag" loadOptions={this.getTags} backspaceRemoves={this.state.backspaceRemoves} />
+                <Select.Async multi={this.state.multi} value={this.state.value} onChange={this.onChange} valueKey="_id" labelKey="tag" loadOptions={this.getTags} backspaceRemoves={this.state.backspaceRemoves} />
             </div>
         );
     }
