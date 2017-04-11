@@ -40,66 +40,66 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.get('/', function (req, res) {
-    console.log("Access code: " + spotify_access_token);
-    res.render('index')
+	console.log("Access code: " + spotify_access_token);
+	res.render('index')
 });
 
 // Initializes database and creates collections
 app.get('/init_db', function (req, res) {
-    db.init();
-    res.send("Database Initialized");
+	db.init();
+	res.send("Database Initialized");
 });
 
 // Adds a new playlist
 app.post('/playlist', function (req, res) {
-    db.addPlaylist(req.body);
-    res.send(req.body);
+	db.addPlaylist(req.body);
+	res.send(req.body);
 });
 
 // Delete a playlist
 app.delete('/playlist', function (req, res) {
-    db.removePlaylist(req.body['id']);
-    res.send(req.body);
+	db.removePlaylist(req.body['id']);
+	res.send(req.body);
 });
 
 // Gets all playlists of a user
 app.get('/playlist/user_id/:user_id', function (req, res) {
-    db.getPlaylists(req.params.user_id).then(function (playlists) {
+	db.getPlaylists(req.params.user_id).then(function (playlists) {
 		res.send(playlists);
-    });
+	});
 });
 
 // Gets all playlists with specific tags
 app.get('/playlist/search/:tags', function (req, res) {
-    db.matchingPlaylists(JSON.parse(req.params.tags)['tags']).then(function (playlists) {
-        var obj = {"playlist" : playlists};
-        res.send(obj);
-    });
+	db.matchingPlaylists(JSON.parse(req.params.tags)['tags']).then(function (playlists) {
+		var obj = {"playlist" : playlists};
+		res.send(obj);
+	});
 });
 
 // Updates the tags of a playlist
 app.put('/playlist/tag', function (req, res) {
-    db.setTags(req.body['id'], req.body['tags']);
-    res.send(req.body);
+	db.setTags(req.body['id'], req.body['tags']);
+	res.send(req.body);
 });
 
 // Adds tags to a playlist
 app.post('/playlist/tag', function (req, res) {
-    db.addTags(req.body['id'], req.body['tags']);
-    res.send(req.body);
+	db.addTags(req.body['id'], req.body['tags']);
+	res.send(req.body);
 });
 
 // Removes tags to a playlist
 app.delete('/playlist/tag', function (req, res) {
-    db.removeTags(req.body['id'], req.body['tags']);
-    res.send(req.body);
+	db.removeTags(req.body['id'], req.body['tags']);
+	res.send(req.body);
 });
 
 // Gets all tags of a playlist
 app.get('/playlist/tag/:id', function (req, res) {
-    db.getTagsOfPlaylist(req.params.id).then(function (tags) {
-        res.send(tags);
-    });
+	db.getTagsOfPlaylist(req.params.id).then(function (tags) {
+		res.send(tags);
+	});
 });
 
 
@@ -183,7 +183,6 @@ app.get('/callback', function(req, res) {
 
 	// your application requests refresh and access tokens
 	// after checking the state parameter
-
 	var code = req.query.code || null;
 	var state = req.query.state || null;
 	var storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -223,15 +222,12 @@ app.get('/callback', function(req, res) {
 
 				// use the access token to access the Spotify Web API
 				request.get(options, function(error, response, body) {
-					// console.log(body);
+					res.cookie("username", body.display_name ? body.display_name : body.id);
+					res.cookie("spotify_access_token", access_token);
+					res.redirect('/');
 				});
 
 				// we can also pass the token to the browser to make requests from there
-				res.redirect('/#'
-					//querystring.stringify({
-					//	access_token: access_token,
-					//	refresh_token: refresh_token
-				);
 			} else {
 				res.redirect('/#' +
 					querystring.stringify({
@@ -267,19 +263,19 @@ app.get('/refresh_token', function(req, res) {
 });
 
 app.get('/tags', function(request, response) {
-    let search = request.query.tag;
-    if(typeof search == "string")
-    	search = search.toLowerCase();
-    else
-    	search = "";
+	let search = request.query.tag;
+	if(typeof search == "string")
+		search = search.toLowerCase();
+	else
+		search = "";
 
-    console.log("search: \'"+ search + "\'");
+	console.log("search: \'"+ search + "\'");
 
 	//TODO: set search to lowercase
-   	db.getAllTags(search).then(function (t) {
-        console.log(t);
-        response.send(t);
-    });
+	db.getAllTags(search).then(function (t) {
+		console.log(t);
+		response.send(t);
+	});
 });
 
 db.init();
