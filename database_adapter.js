@@ -30,7 +30,13 @@ var addPlaylist = function (playlist) {
 
 // TODO: should decrement tags uses
 var removePlaylist = function (id) {
-    Playlists.remove({id:id});
+    if(playlistExists(id)) {
+        Playlists.find({id: id}).toArray(function (err, result) {
+            console.log(result);
+            //decrementUses(result['tags']);
+        });
+        //Playlists.remove({id: id});
+    }
 };
 
 var getPlaylists = function (user_id) {
@@ -60,8 +66,11 @@ var decrementUses = function (tags) {
     tags.forEach(function (tag) {
         tagExists(tag).then(function (exists) {
             if(exists)
-                Tags.update({tag: tag}, { $inc: { uses: -1} });
+                Tags.updateOne({tag: tag}, { $inc: { uses: -1} });
+            else
+                Tags.deleteOne({tag:tag, uses:0});
         });
+        // TODO: delete tag if no uses
     });
 };
 
@@ -69,9 +78,9 @@ var incrementUses = function (tags) {
     tags.forEach(function (tag) {
         tagExists(tag).then(function (exists) {
             if(exists)
-                Tags.update({tag: tag}, { $inc: { uses: 1} });
+                Tags.updateOne({tag: tag}, { $inc: { uses: 1} });
             else
-                Tags.insert({tag: tag, uses: 1})
+                Tags.insertOne({tag: tag, uses: 1})
         });
     });
 };
@@ -105,12 +114,9 @@ var getTagsOfPlaylist = function (id) {
 };
 
 var getAllTags = function (search) {
-    if(typeof search === 'string') {
-        search = search.toLowerCase();
-        return Tags.find({"tag": {$regex: '.*' + search + '.*'}}).sort({uses: -1}).limit(20);
-    }
-    else
-        return Tags.find().sort({uses: -1}).limit(20);
+    var docs = Tags.find({"tag": {$regex: ".*" + search + ".*"}}).sort( { uses: -1 } ).toArray();
+
+    return docs;
 };
 
 module.exports = {

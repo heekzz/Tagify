@@ -266,14 +266,20 @@ app.get('/refresh_token', function(req, res) {
 	});
 });
 
-app.get('/tags', function(request, result) {
-    //let tag = request.query.tag;
-   	/*db.getAllTags("").then(function (tags) {
-        result.json(tags);
-	});*/
+app.get('/tags', function(request, response) {
+    let search = request.query.tag;
+    if(typeof search == "string")
+    	search = search.toLowerCase();
+    else
+    	search = "";
 
-   	var tags = db.getAllTags("");
-   	result.send(JSON.stringify(tags));
+    console.log("search: \'"+ search + "\'");
+
+	//TODO: set search to lowercase
+   	db.getAllTags(search).then(function (t) {
+        console.log(t);
+        response.send(t);
+    });
 });
 
 db.init();
