@@ -28,15 +28,12 @@ var addPlaylist = function (playlist) {
     incrementUses(playlist['tags']);
 };
 
-// TODO: should decrement tags uses
+// TODO: what if playlist doesn't exist?
 var removePlaylist = function (id) {
-    if(playlistExists(id)) {
-        Playlists.find({id: id}).toArray(function (err, result) {
-            console.log(result);
-            //decrementUses(result['tags']);
-        });
-        //Playlists.remove({id: id});
-    }
+    getTagsOfPlaylist(id).then(function (tags) {
+        decrementUses(tags);
+    });
+    Playlists.deleteOne({id:id});
 };
 
 var getPlaylists = function (user_id) {
