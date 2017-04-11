@@ -79,14 +79,14 @@ app.get('/playlist/search/:tags', function (req, res) {
 
 // Updates the tags of a playlist
 app.put('/playlist/tag', function (req, res) {
-    db.setTags(req.body['id'], req.body['tags']);
-    res.send(req.body);
+    var success = db.setTags(req.body['id'], req.body['tags']);
+    res.send(success);
 });
 
 // Adds tags to a playlist
 app.post('/playlist/tag', function (req, res) {
-    db.addTags(req.body['id'], req.body['tags']);
-    res.send(req.body);
+    var success = db.addTags(req.body['id'], req.body['tags']);
+    res.send(success);
 });
 
 // Removes tags to a playlist
