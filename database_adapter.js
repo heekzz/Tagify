@@ -67,10 +67,9 @@ var decrementUses = function (tags) {
         tagExists(tag).then(function (exists) {
             if(exists)
                 Tags.updateOne({tag: tag}, { $inc: { uses: -1} });
-            else
-                Tags.deleteOne({tag:tag, uses:0});
+
+            Tags.deleteOne({tag:tag, uses:0});
         });
-        // TODO: delete tag if no uses
     });
 };
 
