@@ -10,7 +10,6 @@ var playlists = [];
 
 var SearchField = React.createClass ({
 	displayName: 'SearchField',
-	playlists: [],
 	propTypes: {
 		label: React.PropTypes.string,
 	},
@@ -18,6 +17,7 @@ var SearchField = React.createClass ({
 		return {
 			backspaceRemoves: true,
 			multi: true,
+			playlists: []
 		};
 	},
 	// When we set a new tag in the search field
@@ -42,8 +42,11 @@ var SearchField = React.createClass ({
 				return response.json();
 			})
 			.then((json) => {
-				console.log("Result:" + JSON.stringify(json));
+				console.log("Result:" + JSON.stringify(json.p));
 				// Save in variable to be used in render() function
+				this.setState({
+					playlists: json.playlist
+				});
 				playlists = json;
 			})
 	},
@@ -59,13 +62,14 @@ var SearchField = React.createClass ({
 			});
 	},
 	render () {
-		// TODO: Fix todo below
+		console.log("Current playlists to display:");
+		let pl =  this.state.playlists;
+		console.log(pl);
 		return (
 			<div className="section">
 				{/* Search field component */}
 				<Select.Async multi={this.state.multi} value={this.state.value} onChange={this.onChange} valueKey="_id" labelKey="tag" loadOptions={this.getTags} backspaceRemoves={this.state.backspaceRemoves} />
-				{/* TODO: Check if this is the right way to display data */}
-				{playlists.map(playlistData => <PlaylistResult key={playlistData.id} {...playlistData} />)}
+				{pl.map(playlistData => <PlaylistResult key={playlistData.id} {...playlistData} />)}
 			</div>
 		);
 	}
