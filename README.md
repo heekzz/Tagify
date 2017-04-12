@@ -22,6 +22,8 @@ When choosing our frameworks for the project, we wanted modern tools that we hav
 	* Lightweight, JavaScript through the whole stack
 * [Passport](http://passportjs.org/)
 	* Middleware for authenticating towards external API's. Lets us ignore handling of password and other credentials
+* [Spotify API](https://developer.spotify.com/)
+    * The Spotify API is used to get data in the backend.
 
 ### Database
 * [MongoDB](https://www.mongodb.com/)
