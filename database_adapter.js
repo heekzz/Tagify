@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var conn = "mongodb://tagify:EDji04Y7Hb1q@mongodb.fredrikhakansson.se:27017/Tagify?authMechanism=DEFAULT&authSource=admin";
 var Playlists, Tags;
+var MAX_NUMBER_OF_TAGS = 10;
 
 // TODO: should create the database if it doesn't exist
 var init = function () {
@@ -61,10 +62,9 @@ var tagExists = function (tag) {
 
 var decrementUses = function (tags) {
     tags.forEach(function (tag) {
-        tagExists(tag).then(function (exists) {
-            if(exists)
-                Tags.updateOne({tag: tag}, { $inc: { uses: -1} });
-
+        console.log("tag: " + tag);
+        Tags.findOneAndUpdate({tag:tag}, { $inc: { uses: -1} },{returnNewDocument:true, upsert:false}).then(function (err, doc) {
+            console.log(doc);
             Tags.deleteOne({tag:tag, uses:0});
         });
     });
@@ -85,17 +85,40 @@ var setTags = function (id, tags) {
     //Must always be of type array, even if empty or length = 1
     //TODO: should not allow multidimensional arrays
     if(!tags.isArray)
-        if(tags.length === 0) tags = [];
+        if(tags.length === 0)
+            return false;
         else if(typeof tags === 'string')
             tags = [tags];
 
-    Playlists.update({id:id}, {$set: {tags: tags}});
-    incrementUses(tags);
+    //never accept more than 10 tags
+    if(tags.length > MAX_NUMBER_OF_TAGS)
+        return false;
+
+    getTagsOfPlaylist(id).then(function (t) {
+        //decrement uses of the old tags first
+        removeTags(id, t);
+
+        //then add tags and increment uses
+        Playlists.update({id:id}, {$set: {tags: tags}});
+        incrementUses(tags);
+    });
+
+
+
+    return true;
 };
 
+// TODO: doesn't really return true or false
 var addTags = function (id, tags) {
-    Playlists.update({id:id}, {$addToSet: {tags: {$each: tags}}});
-    incrementUses(tags);
+    getTagsOfPlaylist(id).then(function (t) {
+        if(t.length + tags.length > MAX_NUMBER_OF_TAGS)
+            return false;
+        else {
+            Playlists.update({id: id}, {$addToSet: {tags: {$each: tags}}});
+            incrementUses(tags);
+            return true;
+        }
+    });
 };
 
 var removeTags = function (id, tags) {
