@@ -44,7 +44,7 @@ var SearchField = React.createClass ({
 				console.log("Result:" + JSON.stringify(json.p));
 				// Save in variable to be used in render() function
 				this.setState({
-					playlists: json.playlist
+					playlists: json
 				});
 				playlists = json;
 			})

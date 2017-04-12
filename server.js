@@ -1,13 +1,14 @@
-var express = require('express'); // Express web server framework
-var request = require('request'); // "Request" library
-var cookieParser = require('cookie-parser');
-var querystring = require('querystring');
-var bodyParser = require('body-parser');
-var db = require('./database_adapter');
+const express = require('express'); // Express web server framework
+const request = require('request'); // "Request" library
+const cookieParser = require('cookie-parser');
+const querystring = require('querystring');
+const bodyParser = require('body-parser');
+const db = require('./database_adapter');
+const async = require('async');
 
-var client_id = '942710b65334402c8f285a2dbb74783f'; // Your client id
-var client_secret = 'c0bf5d7b1d6640579daeeebb60979e0c'; // Your secret
-var redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
+const client_id = '942710b65334402c8f285a2dbb74783f'; // Your client id
+const client_secret = 'c0bf5d7b1d6640579daeeebb60979e0c'; // Your secret
+const redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
 
 
 /**
@@ -72,9 +73,33 @@ app.get('/playlist/user_id/:user_id', function (req, res) {
 // Gets all playlists with specific tags
 app.get('/playlist/search/:tags', function (req, res) {
 	db.matchingPlaylists(JSON.parse(req.params.tags)['tags']).then(function (playlists) {
-		var obj = {"playlist" : playlists};
-		res.send(obj);
+		let spotify_playlists = [];
+
+		/*
+		 * Async lets us do one REST call to the Spotify API for each playlist with the tag
+		 * It will wait for all requests to complete and then send all results back to the client in one request
+		 */
+		async.each(playlists, function (playlist, callback) {
+			var options = {
+				url: `https://api.spotify.com/v1/users/${playlist.user_id}/playlists/${playlist.id}`,
+				headers: { 'Authorization': 'Bearer ' + spotify_access_token },
+				json: true
+			};
+			request.get(options, function (err, response, body) {
+				// Add all responses to same array
+				spotify_playlists.push(body);
+				callback();
+			})
+		}, function (err) {
+			// Here we will perform something when all requests are done.
+			if (err) {
+				// Print error if something went wrong
+				console.error(err.message)
+			}
+			res.send(spotify_playlists);
+		});
 	});
+
 });
 
 // Updates the tags of a playlist

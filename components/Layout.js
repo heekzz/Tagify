@@ -14,7 +14,7 @@ export default class Layout extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state =  {
-			username: cookie.load("username"),
+			username: undefined,
 			loggedin: false
 		}
 	}
@@ -28,9 +28,17 @@ export default class Layout extends React.Component {
 		fetch('/loggedin')
 			.then(response => response.json())
 			.then(json => {
-				component.setState({
-					loggedin: json
-				});
+				if (json) {
+					component.setState({
+						loggedin: json,
+						username: cookie.load("username")
+					});
+				}
+				else {
+					component.setState({
+						loggedin: json
+					})
+				}
 			})
 	}
 

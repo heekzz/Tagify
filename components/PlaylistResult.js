@@ -4,15 +4,17 @@
 import React from 'react';
 
 export default class PlaylistResult extends React.Component {
+	getImg(){
+		let images = this.props.images;
+		for (let i = 0; i < images.length; i++) {
+			if (images[i].height == 300)
+				return images[i].url;
+		}
+		return images[0].url;
+	}
 	render() {
-		const img_url = ()  => {
-			let images = this.props.images;
-			for (let i = 0; i < images.length; i++) {
-				if (images[i].height == 300)
-					return images[i];
-			}
-		};
-
+		const img_url = this.getImg();
+		console.log("URL: " + img_url);
 		return (
 			<div className="media">
 				<div className="media-left">
