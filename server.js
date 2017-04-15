@@ -5,10 +5,12 @@ const querystring = require('querystring');
 const bodyParser = require('body-parser');
 const db = require('./database_adapter');
 const async = require('async');
+const os = require('os');
+const config = require('./config');
 
 const client_id = '942710b65334402c8f285a2dbb74783f'; // Your client id
 const client_secret = 'c0bf5d7b1d6640579daeeebb60979e0c'; // Your secret
-const redirect_uri = 'http://localhost:5000/callback'; // Your redirect uri
+const redirect_uri = config.spotify_callback; // Your redirect uri
 
 
 /**
@@ -191,6 +193,7 @@ app.get('/login', function(req, res) {
 	var state = generateRandomString(16);
 	res.cookie(stateKey, state);
 
+	console.log("CALLBACK URL: " + redirect_uri);
 	// your application requests authorization
 	var scope = 'user-read-private user-read-email';
 	res.redirect('https://accounts.spotify.com/authorize?' +
@@ -304,5 +307,6 @@ app.get('/tags', function(request, response) {
 });
 
 db.init();
-console.log('Listening on 5000');
-app.listen(5000);
+let port = config.port;
+console.log('Listening on ' + port);
+app.listen(port);
