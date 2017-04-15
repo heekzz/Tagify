@@ -2,7 +2,7 @@
 
 *Authors:* Emil Gustafsson (emigu059@student.liu.se) & Fredrik Håkansson (freha309@student.liu.se)
 
-[![Build Status](http://jenkins.fredrikhakansson.se/buildStatus/icon?job=Tagify-Test)](http://jenkins.fredrikhakansson.se/job/Tagify-Test/)
+[![Build Status](http://jenkins.fredrikhakansson.se/buildStatus/icon?job=Tagify-Deploy)](http://jenkins.fredrikhakansson.se/job/Tagify-Deploy/)
 
 ## Functional specification
 Our project idea is to enable tagging of your own Spotify playlists. Through this, 
@@ -39,13 +39,13 @@ When choosing our frameworks for the project, we wanted modern tools that we hav
 ### Deployment and CI
 * [Jenkins](https://jenkins.io/)
 	* Common used and customizable CI system. Fairly familiar to us
-* Project is hosted at http://tagify.fredrikhakansson.se 
+* Project is hosted at https://tddd27tagify.herokuapp.com 
 
 
 # Usage instructions
 Download or clone repo. You need `npm` installed to run
 ```bash
-git clone https://github.com/heekzz/Tagify.git
+git clone https://gitlab.ida.liu.se/freha309/TDDD272017_Tagify.git
 cd Tagify
 npm install
 ```
