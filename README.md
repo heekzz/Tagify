@@ -2,7 +2,7 @@
 
 *Authors:* Emil Gustafsson (emigu059@student.liu.se) & Fredrik Håkansson (freha309@student.liu.se)
 
-[![Build Status](http://jenkins.fredrikhakansson.se/buildStatus/icon?job=Tagify-Deploy)](http://jenkins.fredrikhakansson.se/job/Tagify-Deploy/)
+[![Build Status](http://jenkins.fredrikhakansson.se/buildStatus/icon?job=Tagify-Deploy)](http://jenkins.fredrikhakansson.se/blue/organizations/jenkins/Tagify-Deploy/activity)
 
 ## Functional specification
 Our project idea is to enable tagging of your own Spotify playlists. Through this, 
