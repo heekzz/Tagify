@@ -3,54 +3,60 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Menu from './Menu';
-import fetch from 'isomorphic-fetch';
-import SearchField from './SearchField';
 import cookie from 'react-cookie';
+import fetch from 'isomorphic-fetch';
 
 
 var empty, user;
 
 export default class Layout extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state =  {
-			username: undefined,
-			loggedin: false
-		}
-	}
+    constructor(props) {
+        super(props);
+        this.state =  {
+            username: undefined,
+            loggedin: false
+        }
+    }
 
-	componentDidMount() {
-		this.checkSpotifyToken(this);
-	}
+    componentWillMount() {
+        this.checkSpotifyToken(this);
+    }
 
-	// Check with backend if token is valid
-	checkSpotifyToken(component) {
-		fetch('/loggedin')
-			.then(response => response.json())
-			.then(json => {
-				if (json) {
-					component.setState({
-						loggedin: json,
-						username: cookie.load("username")
-					});
-				}
-				else {
-					component.setState({
-						loggedin: json
-					})
-				}
-			})
-	}
-
-
+    // Check with backend if token is valid
+    checkSpotifyToken(component) {
+        console.log("Access token: " + cookie.load("spotify_access_token"));
+        fetch('/loggedin', {credentials: 'include'})
+            .then(response => response.json())
+            .then(json => {
+                localStorage.setItem("loggedin", json);
+                if (json) {
+                    localStorage.setItem("username", cookie.load("username"))
+                    component.setState({
+                        loggedin: json,
+                        username: cookie.load("username")
+                    });
+                }
+                else {
+                    component.setState({
+                        loggedin: json
+                    })
+                }
+            })
+    }
 	render() {
+    	// Setting props of children.
+		// Children are all routes in the "routes.js" file
+    	const childrenWithProps = React.Children.map(this.props.children,
+			(child) => React.cloneElement(child, {
+				loggedin: this.state.loggedin,
+				username: this.state.username
+			}));
+
 		return (
 			<div className="app-container">
-				<Menu username={ this.state.username }/>
+				<Menu username={this.state.username} />
 				<div className="container">
-					{console.log(this.state.loggedin)}
-					{/* Display login button if not logged in, otherwise show search field */}
-					{this.state.loggedin ? <SearchField/> :<a type="button" className="btn btn-default" href="/login">Log in to Spotify</a>}
+					{childrenWithProps}
 				</div>
 			</div>
 		);

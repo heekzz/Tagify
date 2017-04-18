@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router'
+import cookie from 'react-cookie';
 
 export default class Menu extends React.Component {
 	render() {
@@ -13,16 +14,16 @@ export default class Menu extends React.Component {
 							<span className="icon-bar"></span>
 							<span className="icon-bar"></span>
 						</button>
-						<a className="navbar-brand" href="#">Brand</a>
+						{/*<Link to ="/" className="navbar-brand">Brand</Link>*/}
 					</div>
 
 					<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul className="nav navbar-nav">
-							<li><Link to="/">Home</Link></li>
+							<li><Link to="/#">Home</Link></li>
 							{this.props.username ? <li><Link to="/add">Tag my Playlist</Link></li>: ""}
 						</ul>
 						<p className="navbar-text navbar-right">
-							{this.props.username ? "Signed in as " + this.props.username: "Not logged in"}
+							{this.props.username ? "Signed in as " + this.props.username : "Not logged in"}
 						</p>
 					</div>
 				</div>

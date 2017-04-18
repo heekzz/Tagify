@@ -36,7 +36,7 @@ var SearchField = React.createClass ({
 		});
 
 		// Fetch playlists from backend with corresponding tags
-		fetch('/playlist/search/' + JSON.stringify({tags:tags}))
+		fetch('/playlist/search/' + JSON.stringify({tags:tags}), {credentials:'include'})
 			.then((response) => {
 				return response.json();
 			})
@@ -52,7 +52,7 @@ var SearchField = React.createClass ({
 
 	// Fetch tags from backend and print
 	getTags (input) {
-		return fetch(`/tags?tag=${input}`)
+		return fetch(`/tags?tag=${input}`, {credentials: 'include'})
 			.then((response) => {
 				return response.json()
 			})
