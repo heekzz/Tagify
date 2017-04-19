@@ -1,13 +1,10 @@
 'use strict';
 
 import React from 'react';
-import { Link } from 'react-router';
 import Menu from './Menu';
 import cookie from 'react-cookie';
 import fetch from 'isomorphic-fetch';
 
-
-var empty, user;
 
 export default class Layout extends React.Component {
     constructor(props) {
@@ -30,7 +27,7 @@ export default class Layout extends React.Component {
             .then(json => {
                 localStorage.setItem("loggedin", json);
                 if (json) {
-                    localStorage.setItem("username", cookie.load("username"))
+                    localStorage.setItem("username", cookie.load("username"));
                     component.setState({
                         loggedin: json,
                         username: cookie.load("username")

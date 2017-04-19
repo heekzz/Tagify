@@ -12,11 +12,10 @@ export default class IndexPage extends React.Component {
         let content;
         // Render search field if logged in
         if(this.props.loggedin)
-            content =   <SearchField />
+            content =   <SearchField />;
         // Otherwise we show login Modal
         else {
             content = (
-                <div class="modal fade" tabindex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -33,7 +32,6 @@ export default class IndexPage extends React.Component {
                             </div>
                         </div>
                     </div>
-                </div>
             )
         }
         return (

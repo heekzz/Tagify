@@ -6,3 +6,35 @@
     padding: 0 20px 0 20px;
     margin-bottom: 80px;
 }
+
+.coverArt {
+
+}
+.hoverContainer {
+    position: relative;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: black;
+}
+.hoverContainer:hover .overlay {
+    opacity: 0.8;
+}
+
+.textOverlay {
+    color: #1DB954;
+    font-size: 70px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
