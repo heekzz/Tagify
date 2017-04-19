@@ -55,7 +55,7 @@ const stateKey = 'spotify_auth_state';
 // let spotify_access_token = null;
 let app = express();
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/frontend/public'))
     .use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -63,7 +63,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
-app.set('views', './views');
+app.set('views', './frontend/views');
 
 // Initiate passport
 app.use(passport.initialize());
