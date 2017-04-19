@@ -105,20 +105,34 @@ app.get('/playlist/search/:tags', function (req, res) {
     let spotify_access_token = req.cookies.spotify_access_token;
     db.matchingPlaylists(JSON.parse(req.params.tags)['tags']).then(function (playlists) {
         let spotify_playlists = [];
+
+        // Decide which fields that should be returned by the Spotify API.
+        // See https://developer.spotify.com/web-api/get-playlist/#tablepress-101
+        const fields = ['description', 'name', 'external_urls.spotify', 'owner.id', 'images(height,url)', 'tracks.href', 'tracks.total'];
+        const fieldsParam = "fields=" + fields.join();
+
         /*
          * Async lets us do one REST call to the Spotify API for each playlist with the tag
          * It will wait for all requests to complete and then send all results back to the client in one request
          */
-        async.each(playlists, function (playlist, callback) {
+        async.each(playlists, function (db_playlist, callback) {
             let options = {
-                url: `https://api.spotify.com/v1/users/${playlist.user_id}/playlists/${playlist.id}`,
+                url: `https://api.spotify.com/v1/users/${db_playlist.user_id}/playlists/${db_playlist.id}?${fieldsParam}`,
                 headers: { 'Authorization': 'Bearer ' + spotify_access_token },
                 json: true
             };
-            request.get(options, function (err, response, body) {
-                // Add all responses to same array
-                spotify_playlists.push(body);
-                callback();
+            request.get(options, function (err1, response1, playlist) {
+                // Get track and artist name for all tracks in the playlist
+                const track_fields = '&fields=items(track(name,artists(name)))';
+                options.url = playlist.tracks.href + track_fields;
+                request.get(options, function (err2, response2, tracks) {
+                    playlist.tracks = tracks.items;
+
+                    // Add all responses to same array
+                    spotify_playlists.push(playlist);
+                    callback();
+                });
+
             })
         }, function (err) {
             // Here we will perform something when all requests are done.
