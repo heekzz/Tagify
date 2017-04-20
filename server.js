@@ -123,14 +123,15 @@ app.get('/playlist/search/:tags', function (req, res) {
                 json: true
             };
             request.get(options, function (err1, response1, playlist) {
+                playlist.tags = db_playlist.tags;
                 // Get track and artist name for all tracks in the playlist
-                const track_fields = '&fields=items(track(name,artists(name)))';
+                const track_fields = '&fields=items(track(name,artists(name))),total';
                 options.url = playlist.tracks.href + track_fields;
+                playlist.tags = db_playlist.tags;
+                playlist.matching_tags = intersect(db_playlist.tags, search_tags);
                 request.get(options, function (err2, response2, tracks) {
-                    playlist.tags = db_playlist.tags;
-                    playlist.matching_tags = intersect(db_playlist.tags, search_tags);
                     playlist.tracks = tracks.items;
-                    console.log(playlist);
+
                     // Add all responses to same array
                     spotify_playlists.push(playlist);
                     callback();
