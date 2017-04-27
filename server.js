@@ -103,7 +103,8 @@ app.get('/playlist/user_id/:user_id', function (req, res) {
 // Gets all playlists with specific tags
 app.get('/playlist/search/:tags', function (req, res) {
     let spotify_access_token = req.cookies.spotify_access_token;
-    db.matchingPlaylists(JSON.parse(req.params.tags)['tags']).then(function (playlists) {
+    let search_tags = JSON.parse(req.params.tags)['tags'];
+    db.matchingPlaylists(search_tags).then(function (playlists) {
         let spotify_playlists = [];
 
         // Decide which fields that should be returned by the Spotify API.
@@ -126,8 +127,10 @@ app.get('/playlist/search/:tags', function (req, res) {
                 const track_fields = '&fields=items(track(name,artists(name)))';
                 options.url = playlist.tracks.href + track_fields;
                 request.get(options, function (err2, response2, tracks) {
+                    playlist.tags = db_playlist.tags;
+                    playlist.matching_tags = intersect(db_playlist.tags, search_tags);
                     playlist.tracks = tracks.items;
-
+                    console.log(playlist);
                     // Add all responses to same array
                     spotify_playlists.push(playlist);
                     callback();
@@ -140,12 +143,47 @@ app.get('/playlist/search/:tags', function (req, res) {
                 // Print error if something went wrong
                 console.error(err.message)
             }
-            // Return playlists sorted by number of followers
-            res.send(spotify_playlists.sort(function(a, b){return b.followers.total-a.followers.total}));
+            // Return playlists sorted according to comparePlaylists
+            res.send(spotify_playlists.sort(function(a, b){return comparePlaylists(a,b)}));
         });
     });
 
 });
+
+// Finds intersecting values of two arrays
+function intersect(a, b)
+{
+    var ai=0, bi=0;
+    var result = [];
+
+    while( ai < a.length && bi < b.length )
+    {
+        if      (a[ai] < b[bi] ){ ai++; }
+        else if (a[ai] > b[bi] ){ bi++; }
+        else /* they're equal */
+        {
+            result.push(a[ai]);
+            ai++;
+            bi++;
+        }
+    }
+    return result;
+}
+
+// Return playlists with most matching tags first, then sort on number of followers
+function comparePlaylists(a, b) {
+    let mt1 = a.matching_tags.length;
+    let mt2 = b.matching_tags.length;
+
+    let f1 = a.followers.total;
+    let f2 = b.followers.total;
+
+    if (mt1 > mt2) return -1;
+    if (mt1 < mt2) return 1;
+    if (f1 > f2) return -1;
+    if (f1 < f2) return 1;
+    return 0;
+}
 
 // Updates the tags of a playlist
 app.put('/playlist/tag', function (req, res) {
