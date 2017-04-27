@@ -108,7 +108,7 @@ app.get('/playlist/search/:tags', function (req, res) {
 
         // Decide which fields that should be returned by the Spotify API.
         // See https://developer.spotify.com/web-api/get-playlist/#tablepress-101
-        const fields = ['description', 'name', 'external_urls.spotify', 'owner.id', 'images(height,url)', 'tracks.href', 'tracks.total'];
+        const fields = ['description', 'name', 'external_urls.spotify', 'owner.id', 'images(height,url)', 'tracks.href', 'tracks.total', 'followers.total'];
         const fieldsParam = "fields=" + fields.join();
 
         /*
@@ -140,7 +140,8 @@ app.get('/playlist/search/:tags', function (req, res) {
                 // Print error if something went wrong
                 console.error(err.message)
             }
-            res.send(spotify_playlists);
+            // Return playlists sorted by number of followers
+            res.send(spotify_playlists.sort(function(a, b){return b.followers.total-a.followers.total}));
         });
     });
 
@@ -248,7 +249,6 @@ app.get('/tags', function(request, response) {
 
     console.log("search: \'"+ search + "\'");
 
-    //TODO: set search to lowercase
     db.getAllTags(search).then(function (t) {
         console.log(t);
         response.send(t);
