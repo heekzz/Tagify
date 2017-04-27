@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const async = require('async');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
+const favicon = require('serve-favicon');
+const path = require('path');
 
 const db = require('./database_adapter');
 const config = require('./config');
@@ -22,20 +24,6 @@ passport.use(new SpotifyStrategy({
     return done(null, accessToken);
 }));
 
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
-let generateRandomString = function(length) {
-    let text = '';
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    for (let i = 0; i < length; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-};
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
 //   serialize users into and deserialize users out of the session. Typically,
@@ -52,13 +40,15 @@ passport.deserializeUser(function(obj, done) {
 });
 
 const stateKey = 'spotify_auth_state';
-// let spotify_access_token = null;
+
 let app = express();
 
-app.use(express.static(__dirname + '/frontend/public'))
+app.use(express.static(path.join(__dirname ,'frontend', 'public')))
     .use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(favicon(path.join(__dirname, 'frontend', 'public', 'img', 'favicon.ico')));
 
 app.use(bodyParser.json());
 
@@ -130,7 +120,7 @@ app.get('/playlist/search/:tags', function (req, res) {
                 playlist.tags = db_playlist.tags;
                 playlist.matching_tags = intersect(db_playlist.tags, search_tags);
                 request.get(options, function (err2, response2, tracks) {
-                    playlist.tracks = tracks.items;
+                    playlist.tracks = tracks;
 
                     // Add all responses to same array
                     spotify_playlists.push(playlist);
@@ -292,6 +282,42 @@ app.get('/tags', function(request, response) {
         console.log(t);
         response.send(t);
     });
+});
+
+// Get user info and playlist of logged in user
+app.get('/user/info', function (req, res) {
+    let options = {
+        url: 'https://api.spotify.com/v1/me',
+        headers: { 'Authorization': 'Bearer ' + req.cookies.spotify_access_token},
+        json: true
+    };
+
+    // Get user info and playlists of user in parallel
+    async.parallel([
+        // Get user info from Spotify
+        function(callback) {
+            request.get(options, function (error, response, body) {
+                if(error)
+                    callback(error, null);
+                callback(null, body);
+            })
+        },
+        // Get user playlists from Spotify
+        function (callback) {
+            options.url = 'https://api.spotify.com/v1/me/playlists';
+            request.get(options, function(error, response, body){
+                if(error)
+                    callback(error, null);
+                callback(null, body);
+            })
+        }
+        // Callback, sends back response to client
+    ],  function (err, results) {
+        if (err)
+            res.send(err);
+        else
+            res.send({profile: results[0], playlists: results[1]});
+    })
 });
 
 db.init();
