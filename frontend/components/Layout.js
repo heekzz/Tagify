@@ -40,22 +40,20 @@ export default class Layout extends React.Component {
                 }
             })
     }
-	render() {
-    	// Setting props of children.
-		// Children are all routes in the "routes.js" file
-    	const childrenWithProps = React.Children.map(this.props.children,
-			(child) => React.cloneElement(child, {
-				loggedin: this.state.loggedin,
-				username: this.state.username
-			}));
+    render() {
+        // Setting props of children.
+        // Children are all routes in the "routes.js" file
+        const childrenWithProps = React.Children.map(this.props.children,
+            (child) => React.cloneElement(child, {
+                loggedin: this.state.loggedin,
+                username: this.state.username
+            }));
 
-		return (
-			<div className="app-container">
-				<Menu username={this.state.username} />
-				<div className="container">
-					{childrenWithProps}
-				</div>
-			</div>
-		);
-	}
+        return (
+            <div className="app-container">
+                <Menu username={this.state.username} />
+                {childrenWithProps}
+            </div>
+        );
+    }
 }

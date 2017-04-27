@@ -3,8 +3,10 @@
  */
 import React from 'react';
 import { Link } from 'react-router';
+import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 export default class PlaylistResult extends React.Component {
+    // Get a image with width 300 if existing, otherwise take first image
     getImg(){
         let images = this.props.images;
         for (let i = 0; i < images.length; i++) {
@@ -13,15 +15,37 @@ export default class PlaylistResult extends React.Component {
         }
         return images[0].url;
     }
+
+    // Map tracks of a playlist to a list
+    generateTracksList() {
+        let tracks = this.props.tracks.items;
+        let list = tracks.map(function(item, i) {
+            if (i < 10)
+                return <li key={i}><strong>{item.track.name}</strong> - {item.track.artists[0].name}</li>;
+        });
+        return (
+            <ul>
+                {list}
+            </ul>
+        )
+    }
+
     render() {
         const img_url = this.getImg();
-        console.log("URL: " + img_url);
+
+        // Popover containing a list of tracks in the playlist
+        const tracksPopover = (
+            <Popover title="Tracks">
+                {this.generateTracksList()}
+            </Popover>
+        );
+
         return (
             <div className="col-md-3 col-sm-4 col-xs-12">
                 <div className="thumbnail" >
                     <a href={this.props.external_urls.spotify}>
                         <div className="hoverContainer">
-                            <img src={img_url} alt={this.props.name} />
+                            <img className="coverArt" src={img_url} alt={this.props.name} />
                             <div className="overlay">
                                 <div className="textOverlay"><span className="glyphicon glyphicon-play" aria-hidden="true"></span></div>
                             </div>
@@ -31,6 +55,13 @@ export default class PlaylistResult extends React.Component {
                         <h3>{this.props.name}</h3>
                         <p>Owner: {this.props.owner.id}</p>
                         <p>Tracks: {this.props.tracks.total}</p>
+                        <p>Tags: #{this.props.tags.join(', #')}</p>
+                        <p>
+                            <button className="btn btn-green btn-xs">Follow</button>
+                            <OverlayTrigger trigger="click" rootClose placement="top" overlay={tracksPopover}>
+                                <button className="btn btn-default btn-xs" >Tracks</button>
+                            </OverlayTrigger>
+                        </p>
                     </div>
                 </div>
             </div>
