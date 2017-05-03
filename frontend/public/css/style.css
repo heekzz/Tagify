@@ -41,6 +41,13 @@
     opacity: 0.8;
 }
 
+.remove-tag {
+    color: red;
+}
+.remove-tag:hover {
+    color: darkred;
+}
+
 .textOverlay {
     color: #1DB954;
     font-size: 70px;

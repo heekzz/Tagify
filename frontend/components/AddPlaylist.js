@@ -46,7 +46,6 @@ export default class AddPlaylist extends React.Component {
             <div className="add-playlist-container container">
                 {/* Display user info */}
                 {content}
-                {/*{modal}*/}
             </div>
         )
     }
@@ -119,6 +118,7 @@ class AddModal extends React.Component {
         };
         this.addTag = this.addTag.bind(this);
         this.getTags = this.getTags.bind(this);
+        this.removeTag = this.removeTag.bind(this);
     }
 
     componentWillMount() {
@@ -194,14 +194,28 @@ class AddModal extends React.Component {
             })
     }
 
+    removeTag(tag) {
+        let body = {"id": this.props.playlist.id, tags:[tag]};
+        fetch('/playlist/tag', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then((response) => response.json())
+            .then(()=> {
+                this.getTags();
+            });
+    }
+
     render() {
         let t = this.state.tags;
         let tags = t.map((tag) =>
-            <li>{tag}</li>
+            <li>{tag} <a className="remove-tag" onClick={() => this.removeTag(tag)}> <span className="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
         );
         return (
             <Modal show={this.props.showModal} onHide={this.props.close}>
-                <Modal.Header closeButton>
+                <Modal.Header closeButton={true}>
                     <Modal.Title>Edit tags for {this.props.playlist.name}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
