@@ -178,14 +178,20 @@ function comparePlaylists(a, b) {
 
 // Updates the tags of a playlist
 app.put('/playlist/tag', function (req, res) {
-    db.setTags(req.body['id'], req.body['tags']);
-    res.send(req.body);
+    db.playlistExists(req.body['id']).then((exist) => {
+        if (exist) {
+            db.setTags(req.body['id'], req.body['tags']);
+            res.send({"success": true, "message":"Added to playlist " + req.body['id'], "input": req.body});
+        } else {
+            res.send({"success": false, "input": req.body});
+        }
+    });
 });
 
 // Adds tags to a playlist
 app.post('/playlist/tag', function (req, res) {
     db.addTags(req.body['id'], req.body['tags']);
-    res.send(req.body);
+    res.send({"success": true , "input": req.body});
 });
 
 // Removes tags to a playlist

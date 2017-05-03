@@ -151,5 +151,6 @@ module.exports = {
     matchingPlaylists: matchingPlaylists,
     removeTags: removeTags,
     getTagsOfPlaylist: getTagsOfPlaylist,
-    getAllTags: getAllTags
+    getAllTags: getAllTags,
+    playlistExists: playlistExists
 };

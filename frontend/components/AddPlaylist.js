@@ -131,13 +131,30 @@ class AddModal extends React.Component {
 
     getTags() {
         fetch('/playlist/tag/' + this.props.playlist.id)
-            .then((response) => {
-                return response.json();
-            })
+            .then((response) =>  response.json())
             .then((json) => {
                 this.setState({
                     tags:json
                 })
+            });
+    }
+
+    createPlaylist(tags) {
+        let playlist = {
+            "id": this.props.playlist.id,
+            "user_id": this.props.playlist.owner.id,
+            "tags": tags
+        };
+
+        fetch('/playlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(playlist)
+        }).then((response) => response.json())
+            .then(() => {
+                this.getTags();
             });
     }
 
@@ -159,7 +176,11 @@ class AddModal extends React.Component {
         }).then((response) => {
             return response.json();
         }).then((json) => {
-            this.getTags();
+            if (json.success) {
+                this.getTags();
+            } else {
+                this.createPlaylist(newTag.tags);
+            }
         });
     }
 
