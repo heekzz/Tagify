@@ -128,7 +128,10 @@ var removeTags = function (id, tags) {
 
 var getTagsOfPlaylist = function (id) {
     return Playlists.findOne({id:id}).then(function (p){
-        return p['tags'];
+        if (p !== null)
+            return p['tags'];
+        else
+            return [];
     });
 };
 
