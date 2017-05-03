@@ -10,7 +10,7 @@ export default class PlaylistResult extends React.Component {
     getImg(){
         let images = this.props.images;
         for (let i = 0; i < images.length; i++) {
-            if (images[i].height == 300)
+            if (images[i].height === 300)
                 return images[i].url;
         }
         return images[0].url;
@@ -20,13 +20,12 @@ export default class PlaylistResult extends React.Component {
     generateTracksList() {
         let tracks = this.props.tracks.items;
         let list = tracks.map(function(item, i) {
-            if (i < 10)
-                return <li key={i}><strong>{item.track.name}</strong> - {item.track.artists[0].name}</li>;
+            return <p key={i}><strong>{item.track.name}</strong> - {item.track.artists[0].name}</p>;
         });
         return (
-            <ul>
+            <div className="tracks-scrollable">
                 {list}
-            </ul>
+            </div>
         )
     }
 

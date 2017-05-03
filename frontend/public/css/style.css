@@ -51,6 +51,11 @@
     -ms-transform: translate(-50%, -50%);
 }
 
+.tracks-scrollable {
+    height:300px;
+    overflow-y:scroll;
+}
+
 /* For extra small screens col-xs-* */
 @media (max-width: 767px) {
     .search-bar-wrapper {
