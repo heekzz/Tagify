@@ -54,7 +54,7 @@ export default class PlaylistResult extends React.Component {
                         <h3>{this.props.name}</h3>
                         <p>Owner: {this.props.owner.id}</p>
                         <p>Tracks: {this.props.tracks.total}</p>
-                        <p>Tags: <b>#{this.props.matching_tags.join(', #')}</b> {this.props.nonmatching_tags.length > 0 ? "#": ""}{this.props.nonmatching_tags.join(', #')}</p>
+                        <p>Tags: <b>#{this.props.matching_tags.join(', #')}</b> {this.props.nonmatching_tags.length > 0 ? ", #": ""}{this.props.nonmatching_tags.join(', #')}</p>
                         <p>
                             <button className="btn btn-green btn-xs">Follow</button>
                             <OverlayTrigger trigger="click" rootClose placement="top" overlay={tracksPopover}>
