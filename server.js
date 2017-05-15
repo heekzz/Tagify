@@ -113,7 +113,7 @@ app.get('/playlist/search/:tags', function (req, res) {
                 options.url = playlist.tracks.href + track_fields;
                 playlist.tags = db_playlist.tags;
                 playlist.matching_tags = intersect(playlist.tags, search_tags);
-                console.log(playlist.matching_tags);
+                playlist.nonmatching_tags = diff(playlist.tags, playlist.matching_tags);
                 request.get(options, function (err2, response2, tracks) {
                     playlist.tracks = tracks;
 
@@ -136,13 +136,18 @@ app.get('/playlist/search/:tags', function (req, res) {
 
 });
 
-// Finds intersecting values of two arrays
-function intersect(a, b)
-{
-    var result = a.filter(function(n) {
+// Finds intersecting values of two arrays (a ∩ b)
+function intersect(a, b) {
+    return a.filter(function(n) {
         return b.indexOf(n) > -1;
     });
-    return result;
+}
+
+// Finds differing values of two arrays (a - b)
+function diff (a, b) {
+    return a.filter(function(n) {
+        return b.indexOf(n) < 0 }
+    );
 }
 
 // Return playlists with most matching tags first, then sort on number of followers
