@@ -112,7 +112,8 @@ app.get('/playlist/search/:tags', function (req, res) {
                 const track_fields = '&fields=items(track(name,artists(name))),total';
                 options.url = playlist.tracks.href + track_fields;
                 playlist.tags = db_playlist.tags;
-                playlist.matching_tags = intersect(db_playlist.tags, search_tags);
+                playlist.matching_tags = intersect(playlist.tags, search_tags);
+                console.log(playlist.matching_tags);
                 request.get(options, function (err2, response2, tracks) {
                     playlist.tracks = tracks;
 
@@ -138,20 +139,9 @@ app.get('/playlist/search/:tags', function (req, res) {
 // Finds intersecting values of two arrays
 function intersect(a, b)
 {
-    var ai=0, bi=0;
-    var result = [];
-
-    while( ai < a.length && bi < b.length )
-    {
-        if      (a[ai] < b[bi] ){ ai++; }
-        else if (a[ai] > b[bi] ){ bi++; }
-        else /* they're equal */
-        {
-            result.push(a[ai]);
-            ai++;
-            bi++;
-        }
-    }
+    var result = a.filter(function(n) {
+        return b.indexOf(n) > -1;
+    });
     return result;
 }
 
@@ -276,10 +266,7 @@ app.get('/tags', function(request, response) {
     else
         search = "";
 
-    console.log("search: \'"+ search + "\'");
-
     db.getAllTags(search).then(function (t) {
-        console.log(t);
         response.send(t);
     });
 });
