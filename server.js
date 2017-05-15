@@ -65,12 +65,6 @@ app.get('/', function (req, res) {
     res.render('index')
 });
 
-// Initializes database and creates collections
-app.get('/init_db', function (req, res) {
-    db.init();
-    res.send("Database Initialized");
-});
-
 // Adds a new playlist
 app.post('/playlist', function (req, res) {
     db.addPlaylist(req.body);
