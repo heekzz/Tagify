@@ -115,6 +115,26 @@
     background-color: white;
 }
 
+.playlist-button-group {
+    width: 100%;
+}
+
+.playlist-button-group > button {
+    width: 46%;
+    margin: 1%;
+    padding: 5px;
+    border: none;
+    border-radius: 30px;
+    color: #ffffff;
+    font-weight: bold;
+}
+.playlist-button-group > .button-follow {
+    background-color: #1DB954;
+}
+.playlist-button-group > .button-tracks {
+    background-color: #000000;
+}
+
 /* For extra small screens col-xs-* */
 @media (max-width: 767px) {
     .search-field-wrapper {

@@ -42,7 +42,7 @@ export default class PlaylistResult extends React.Component {
         return (
             <div className="col-md-3 col-sm-4 col-xs-12">
                 <div className="thumbnail" >
-                    <a href={this.props.external_urls.spotify}>
+                    <a href={this.props.external_urls.spotify} target="_blank">
                         <div className="hoverContainer">
                             <img className="coverArt" src={img_url} alt={this.props.name} />
                             <div className="overlay">
@@ -55,12 +55,12 @@ export default class PlaylistResult extends React.Component {
                         <p>Owner: {this.props.owner.id}</p>
                         <p>Tracks: {this.props.tracks.total}</p>
                         <p>Tags: <b>#{this.props.matching_tags.join(' #')}</b>{this.props.nonmatching_tags.length > 0 ? " #": ""}{this.props.nonmatching_tags.join(' #')}</p>
-                        <p>
-                            <button className="btn btn-green btn-xs">Follow</button>
+                        <div className="playlist-button-group">
+                            <button className="button-follow">Follow</button>
                             <OverlayTrigger trigger="click" rootClose placement="top" overlay={tracksPopover}>
-                                <button className="btn btn-default btn-xs" >Tracks</button>
+                                <button className="button-tracks" >Tracks</button>
                             </OverlayTrigger>
-                        </p>
+                        </div>
                     </div>
                 </div>
             </div>
