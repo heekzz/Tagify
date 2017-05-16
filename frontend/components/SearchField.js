@@ -41,7 +41,6 @@ var SearchField = React.createClass ({
                 return response.json();
             })
             .then((json) => {
-                console.log("Result:" + JSON.stringify(json.p));
                 // Save in variable to be used in render() function
                 this.setState({
                     playlists: json
@@ -65,18 +64,39 @@ var SearchField = React.createClass ({
 
     render () {
         let pl =  this.state.playlists;
+        const suggestedPlaylists = "";
+
+        let mainContent;
+        if (pl.length > 0) {
+            mainContent = (
+                <div className="row is-flex">
+                    {pl.map(playlistData => <PlaylistResult key={playlistData.id} {...playlistData} />)}
+                </div>
+            );
+        } else {
+            mainContent = (
+                <div>
+                    <div className="page-header">
+                        <h1>Welcome!</h1>
+                    </div>
+                    <p>To get started, start searching in the search field at the top or check out some suggested playlists below!</p>
+                    {suggestedPlaylists}
+                </div>
+
+            )
+        }
         return (
-			<div className="search-field-group">
-				<div className="search-bar-wrapper">
-                    {/* Search field component */}
-					<Select.Async className="search-bar" placeholder="Search for tags..." multi={this.state.multi} value={this.state.value} onChange={this.onChange} valueKey="_id" labelKey="tag" isLoading={true} loadOptions={this.getTags} backspaceRemoves={this.state.backspaceRemoves} />
-				</div>
-				<div className="container">
-					<div className="row equal-height">
-                        {pl.map(playlistData => <PlaylistResult key={playlistData.id} {...playlistData} />)}
-					</div>
-				</div>
-			</div>
+            <div className="search-field-group">
+                <div className="header">
+                    <div className="search-field-wrapper">
+                        {/* Search field component */}
+                        <Select.Async className="search-bar" placeholder="Search for tags..." multi={this.state.multi} value={this.state.value} onChange={this.onChange} valueKey="_id" labelKey="tag" isLoading={true} loadOptions={this.getTags} backspaceRemoves={this.state.backspaceRemoves} />
+                    </div>
+                </div>
+                <div className="container">
+                    {mainContent}
+                </div>
+            </div>
         );
     }
 });

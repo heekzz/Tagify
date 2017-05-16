@@ -93,7 +93,7 @@ app.get('/playlist/search/:tags', function (req, res) {
 
         // Decide which fields that should be returned by the Spotify API.
         // See https://developer.spotify.com/web-api/get-playlist/#tablepress-101
-        const fields = ['description', 'name', 'external_urls.spotify', 'owner.id', 'images(height,url)', 'tracks.href', 'tracks.total', 'followers.total'];
+        const fields = ['id', 'description', 'name', 'external_urls.spotify', 'owner.id', 'images(height,url)', 'tracks.href', 'tracks.total', 'followers.total'];
         const fieldsParam = "fields=" + fields.join();
 
         /*

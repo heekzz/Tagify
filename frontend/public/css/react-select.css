@@ -7,7 +7,6 @@
 */
 .Select {
     position: relative;
-
 }
 .Select,
 .Select div,
@@ -38,12 +37,11 @@
     display: table;
     border-spacing: 0;
     border-collapse: separate;
-    height: 56px;
+    height: 36px;
     outline: none;
     overflow: hidden;
     position: relative;
     width: 100%;
-    vertical-align: middle;
 }
 .Select-control:hover {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
@@ -110,7 +108,6 @@
     padding-left: 10px;
     padding-right: 10px;
     vertical-align: middle;
-    margin: 0 auto;
 }
 .Select-input > input {
     width: 100%;
@@ -121,7 +118,7 @@
     display: inline-block;
     font-family: inherit;
     font-size: inherit;
-    margin: 0 auto;
+    margin: 0;
     outline: none;
     line-height: 14px;
     /* For IE 8 compatibility */
@@ -207,7 +204,6 @@
 }
 .Select--multi .Select-multi-value-wrapper {
     display: inline-block;
-    vertical-align: middle;
 }
 .Select .Select-aria-only {
     display: inline-block;

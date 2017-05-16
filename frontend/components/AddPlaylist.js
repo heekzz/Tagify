@@ -35,19 +35,16 @@ export default class AddPlaylist extends React.Component {
         let content = null;
         if (typeof this.state.profile !== 'undefined')
             content = (
-                <div>
-                    <Profile profile={this.state.profile} />
-                    <div className="row equal-height">
+                <div className="container">
+                    <div className="profile-wrapper">
+                        <Profile profile={this.state.profile} />
+                    </div>
+                    <div className="row is-flex">
                         {this.state.playlists.items.map(playlist => <Playlist key={playlist.id} playlist={playlist} />)}
                     </div>
                 </div>
             );
-        return (
-            <div className="add-playlist-container container">
-                {/* Display user info */}
-                {content}
-            </div>
-        )
+        return content;
     }
 
 }
@@ -210,8 +207,8 @@ class AddModal extends React.Component {
 
     render() {
         let t = this.state.tags;
-        let tags = t.map((tag) =>
-            <li>{tag} <a className="remove-tag" onClick={() => this.removeTag(tag)}> <span className="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
+        let tags = t.map((tag , i) =>
+            <li key={i}>{tag} <a className="remove-tag" onClick={() => this.removeTag(tag)}> <span className="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
         );
         return (
             <Modal show={this.props.showModal} onHide={this.props.close}>

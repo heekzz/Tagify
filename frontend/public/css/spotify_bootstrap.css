@@ -4991,6 +4991,7 @@ a.thumbnail.active {
 .thumbnail .caption {
     padding: 9px;
     color: #2e2f33;
+    overflow: hidden;
 }
 .alert {
     padding: 14px;
