@@ -196,6 +196,54 @@ app.get('/playlist/tag/:id', function (req, res) {
     });
 });
 
+// Follow a playlist on Spotify
+app.put('/playlist/follow/:user_id/:playlist_id', function (req, res) {
+    let spotify_access_token = req.cookies.spotify_access_token;
+
+    if (typeof spotify_access_token === 'undefined')
+        res.send("Missing Token");
+    else {
+        let options = {
+            url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}/followers`,
+            headers: { 'Authorization': 'Bearer ' + spotify_access_token },
+            json: {public: true}
+        };
+        request.put(options, function (error, response, body) {
+            let message;
+            if (!error && response.statusCode === 200) {
+                message = {follow: true};
+                res.send(message);
+            } else {
+                message = {error: body};
+                res.send(message);
+            }
+        })
+    }
+});
+
+
+// Unfollow a playlist on Spotify
+app.delete('/playlist/follow/:user_id/:playlist_id', function (req, res) {
+    let spotify_access_token = req.cookies.spotify_access_token;
+
+    if (typeof spotify_access_token === 'undefined')
+        res.send("Missing Token");
+
+    let options = {
+        url: `https://api.spotify.com/v1/users/${req.params.user_id}/playlists/${req.params.playlist_id}/followers`,
+        headers: { 'Authorization': 'Bearer ' + spotify_access_token },
+        json: {public: true}
+    };
+
+    request.delete(options, function (error, response, body) {
+        if (response.statusCode === 200) {
+            res.send({unfollow: true});
+        } else {
+            res.send({error: body})
+        }
+    })
+});
+
 
 
 app.get('/loggedin', function (req, res) {
@@ -226,7 +274,7 @@ app.get('/loggedin', function (req, res) {
 
 
 app.get('/login',
-    passport.authenticate('spotify', {scope: ['user-read-private', 'user-read-email'], showDialog: true}),
+    passport.authenticate('spotify', {scope: ['user-read-private', 'user-read-email', 'playlist-modify-private', 'playlist-modify-public'], showDialog: true}),
     function(req, res) {
         // Will not be called...
     }

@@ -6,6 +6,12 @@ import { Link } from 'react-router';
 import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 export default class PlaylistResult extends React.Component {
+    constructor(props) {
+        super(props);
+        this.follow = this.follow.bind(this);
+        this.unfollow = this.unfollow.bind(this);
+    }
+
     // Get a image with width 300 if existing, otherwise take first image
     getImg(){
         let images = this.props.images;
@@ -27,6 +33,28 @@ export default class PlaylistResult extends React.Component {
                 {list}
             </div>
         )
+    }
+
+    // Follow the playlist
+    follow() {
+        fetch(`/playlist/follow/${this.props.owner.id}/${this.props.id}`, {
+            method: 'PUT',
+            credentials: 'include'
+        }).then((response) => response.json())
+            .then((json) => {
+                console.log(json);
+            })
+    }
+
+    // Unfollow the playlist
+    unfollow() {
+        fetch(`/playlist/follow/${this.props.owner.id}/${this.props.id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        }).then((response) => response.json())
+            .then((json) => {
+                console.log(json);
+            })
     }
 
     render() {
@@ -56,7 +84,7 @@ export default class PlaylistResult extends React.Component {
                         <p>Tracks: {this.props.tracks.total}</p>
                         <p>Tags: <b>#{this.props.matching_tags.join(' #')}</b>{this.props.nonmatching_tags.length > 0 ? " #": ""}{this.props.nonmatching_tags.join(' #')}</p>
                         <div className="playlist-button-group">
-                            <button className="button-follow">Follow</button>
+                            <button className="button-follow" onClick={this.follow}>Follow</button>
                             <OverlayTrigger trigger="click" rootClose placement="top" overlay={tracksPopover}>
                                 <button className="button-tracks" >Tracks</button>
                             </OverlayTrigger>
