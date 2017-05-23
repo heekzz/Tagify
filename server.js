@@ -93,7 +93,7 @@ app.get('/playlist/search/:tags', function (req, res) {
 
         // Decide which fields that should be returned by the Spotify API.
         // See https://developer.spotify.com/web-api/get-playlist/#tablepress-101
-        const fields = ['id', 'description', 'name', 'external_urls.spotify', 'owner.id', 'images(height,url)', 'tracks.href', 'tracks.total', 'followers.total'];
+        const fields = ['description', 'name', 'external_urls.spotify', 'owner.id', 'images(height,url)', 'tracks.href', 'tracks.total', 'followers.total'];
         const fieldsParam = "fields=" + fields.join();
 
         /*
@@ -307,8 +307,28 @@ app.get('/user/info', function (req, res) {
     ],  function (err, results) {
         if (err)
             res.send(err);
-        else
-            res.send({profile: results[0], playlists: results[1]});
+        else{
+
+            // Remove all playlists with another owner
+            let playlists = results[1];
+            let username = results[0]['id'];
+
+            let num = 0;
+            let i = playlists['items'].length;
+            while (i--) {
+                let p = playlists['items'][i];
+
+                if (p !== undefined) {
+                    if (p['owner']['id'] === username)
+                        num++;
+                    else
+                        playlists['items'].splice(i, 1);
+                }
+            }
+            // Sets new total value, might cause problems when a user has > 20 playlists?
+            playlists['total'] = num;
+            res.send({profile: results[0], playlists: playlists});
+        }
     })
 });
 
