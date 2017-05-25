@@ -87,6 +87,7 @@ app.get('/playlist/user_id/:user_id', function (req, res) {
 // Gets all playlists with specific tags
 app.get('/playlist/search/:tags', function (req, res) {
     let spotify_access_token = req.cookies.spotify_access_token;
+    let spotify_user = req.cookies.spotify_id;
     let search_tags = JSON.parse(req.params.tags)['tags'];
     db.matchingPlaylists(search_tags).then(function (playlists) {
         let spotify_playlists = [];
@@ -97,7 +98,7 @@ app.get('/playlist/search/:tags', function (req, res) {
         const fieldsParam = "fields=" + fields.join();
 
         /*
-         * Async lets us do one REST call to the Spotify API for each playlist with the tag
+         * Async.each lets us do one REST call to the Spotify API for each playlist with the tag
          * It will wait for all requests to complete and then send all results back to the client in one request
          */
         async.each(playlists, function (db_playlist, callback) {
@@ -115,11 +116,18 @@ app.get('/playlist/search/:tags', function (req, res) {
                 playlist.matching_tags = intersect(playlist.tags, search_tags);
                 playlist.nonmatching_tags = diff(playlist.tags, playlist.matching_tags);
                 request.get(options, function (err2, response2, tracks) {
+                    // Add tracks to playlist
                     playlist.tracks = tracks;
 
-                    // Add all responses to same array
-                    spotify_playlists.push(playlist);
-                    callback();
+                    // Check if user follows the playlist or not
+                    options.url =  `https://api.spotify.com/v1/users/${db_playlist.user_id}/playlists/${db_playlist.id}/followers/contains?ids=${spotify_user}`;
+                    request.get(options, function (err3, response3, follow) {
+                        playlist.follow = follow[0];
+
+                        // Add all responses to same array
+                        spotify_playlists.push(playlist);
+                        callback();
+                    })
                 });
 
             })
@@ -261,10 +269,12 @@ app.get('/loggedin', function (req, res) {
         status_code = response.statusCode;
         if (status_code === 200) {
             res.cookie("username", body.display_name ? body.display_name : body.id);
+            res.cookie("spotify_id", body.id);
             res.send(true);
         } else {
             res.clearCookie("username");
             res.clearCookie("spotify_access_token");
+            res.clearCookie("spotify_id");
             res.send(false);
         }
     });

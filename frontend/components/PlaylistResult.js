@@ -3,11 +3,13 @@
  */
 import React from 'react';
 import { Link } from 'react-router';
+import cookie from 'react-cookie';
 import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 export default class PlaylistResult extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {follow: props.follow};
         this.follow = this.follow.bind(this);
         this.unfollow = this.unfollow.bind(this);
     }
@@ -42,7 +44,11 @@ export default class PlaylistResult extends React.Component {
             credentials: 'include'
         }).then((response) => response.json())
             .then((json) => {
-                console.log(json);
+                if (json.follow === true) {
+                    this.setState({
+                        follow: true
+                    });
+                }
             })
     }
 
@@ -53,12 +59,26 @@ export default class PlaylistResult extends React.Component {
             credentials: 'include'
         }).then((response) => response.json())
             .then((json) => {
-                console.log(json);
+                if (json.unfollow === true) {
+                    this.setState({
+                        follow:false
+                    });
+                }
             })
     }
 
     render() {
         const img_url = this.getImg();
+        let spotify_user = cookie.load("spotify_id");
+        let followButton = null;
+
+        if (this.props.owner.id === spotify_user) {
+            followButton = <button className="button-disabled" title="You own this playlist" disabled={true}>Owner</button>;
+        } else if (this.state.follow === false) {
+            followButton = <button className="button-green" title="Click to follow this playlist" onClick={this.follow}>Follow</button>;
+        } else {
+            followButton = <button className="button-red" title="You already follows this playlist, click to unfollow" onClick={this.unfollow}>Unfollow</button>;
+        }
 
         // Popover containing a list of tracks in the playlist
         const tracksPopover = (
@@ -84,9 +104,10 @@ export default class PlaylistResult extends React.Component {
                         <p>Tracks: {this.props.tracks.total}</p>
                         <p>Tags: <b>#{this.props.matching_tags.join(' #')}</b>{this.props.nonmatching_tags.length > 0 ? " #": ""}{this.props.nonmatching_tags.join(' #')}</p>
                         <div className="playlist-button-group">
-                            <button className="button-follow" onClick={this.follow}>Follow</button>
+                            {/*<button className="button-follow" onClick={this.follow}>Follow</button>*/}
+                            {followButton}
                             <OverlayTrigger trigger="click" rootClose placement="top" overlay={tracksPopover}>
-                                <button className="button-tracks" >Tracks</button>
+                                <button className="button-black" title="Show tracks of this playlist" >Tracks</button>
                             </OverlayTrigger>
                         </div>
                     </div>
