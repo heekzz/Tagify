@@ -52,10 +52,16 @@ export default class AddPlaylist extends React.Component {
 
 class Profile extends React.Component {
     render() {
+        let profile_img = null;
+        if (this.props.profile.images[0])
+            profile_img = this.props.profile.images[0].url;
+        else
+            profile_img = '/img/default_user.jpg';
+
         return (
             <div className="row">
                 <div className="col-md-4 col-sm-6 col-xs-12">
-                    <img src={this.props.profile.images[0].url} alt="Profile image" className="img-rounded" />
+                    <img src={profile_img} alt="Profile image" className="img-rounded" />
                 </div>
                 <div className="col-md-8 col-sm-6 col-xs-12">
                     <h3>{this.props.profile.display_name ? this.props.profile.display_name: this.props.profile.id}</h3>

@@ -1,5 +1,5 @@
 .header {
-    background-image: url("../img/Tagify_header_green.png");
+    background-image: url("../img/header.png");
     /*padding: 5vh 30%;*/
     margin-bottom: 6vh;
     max-height: 20vh;
@@ -114,6 +114,63 @@
     padding: 10px;
     background-color: white;
 }
+
+.playlist-button-group {
+    width: 100%;
+}
+
+.playlist-button-group > button {
+    width: 46%;
+    margin: 1%;
+    padding: 5px;
+    border: none;
+    border-radius: 30px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.button-green,.button-red,
+.button-disabled,.button-black {
+    outline:none;
+}
+
+.button-green {
+    background-color: #1DB954;
+}
+.button-red {
+    background-color: #b90c14;
+}
+.button-disabled {
+    background-color: #a9a9a9;
+}
+.button-black {
+    background-color: #000000;
+}
+
+.button-green:hover {
+    background-color: #1ece5b;
+}
+.button-red:hover {
+    background-color: #d80c14;
+}
+.button-black:hover {
+    background-color: #2e2e2e;
+}
+
+.button-green:active {
+    background-color: #1DB954;
+}
+.button-red:active {
+    background-color: #b90c14;
+}
+.button-disabled:active {
+    background-color: #a9a9a9;
+}
+.button-black:active {
+    background-color: #000000;
+}
+
+
 
 /* For extra small screens col-xs-* */
 @media (max-width: 767px) {
