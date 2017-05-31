@@ -6,7 +6,9 @@ import Select from 'react-select';
 import fetch from 'isomorphic-fetch';
 import PlaylistResult from './PlaylistResult';
 
-
+/*
+ * React component consisting of both the search field and the results at the homepage
+ */
 var SearchField = React.createClass ({
     displayName: 'SearchField',
     propTypes: {
@@ -48,11 +50,8 @@ var SearchField = React.createClass ({
             })
     },
 
-    // Fetch tags from backend and print
+    // Fetch all available tags from backend to be used by search field
     getTags (input) {
-        // if (!input) {
-        //     return Promise.resolve({ options: [] });
-        // }
         return fetch(`/tags?tag=${input}`, {credentials: 'include'})
             .then((response) => {
                 return response.json()
@@ -67,9 +66,11 @@ var SearchField = React.createClass ({
         const suggestedPlaylists = "";
 
         let mainContent;
+        // Map playlist results and print if any. Otherwise, show explaining text
         if (pl.length > 0) {
             mainContent = (
                 <div className="row is-flex">
+                    {/* Map playlist results to PlaylistResult components */}
                     {pl.map(playlistData => <PlaylistResult key={playlistData.id} {...playlistData} />)}
                 </div>
             );
@@ -94,6 +95,7 @@ var SearchField = React.createClass ({
                     </div>
                 </div>
                 <div className="container">
+                    {/* Contains playlist results or a explaining text */}
                     {mainContent}
                 </div>
             </div>

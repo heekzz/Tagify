@@ -6,6 +6,9 @@ import { Link } from 'react-router';
 import cookie from 'react-cookie';
 import {Popover, OverlayTrigger} from 'react-bootstrap';
 
+/*
+ * A Playlist component for the main results at the homepage
+ */
 export default class PlaylistResult extends React.Component {
     constructor(props) {
         super(props);
@@ -72,6 +75,7 @@ export default class PlaylistResult extends React.Component {
         let spotify_user = cookie.load("spotify_id");
         let followButton = null;
 
+        // Display different buttons depending on if you follow the playlist or not or if you own the playlist
         if (this.props.owner.id === spotify_user) {
             followButton = <button className="button-disabled" title="You own this playlist" disabled={true}>Owner</button>;
         } else if (this.state.follow === false) {
@@ -104,7 +108,6 @@ export default class PlaylistResult extends React.Component {
                         <p>Tracks: {this.props.tracks.total}</p>
                         <p>Tags: <b>#{this.props.matching_tags.join(' #')}</b>{this.props.nonmatching_tags.length > 0 ? " #": ""}{this.props.nonmatching_tags.join(' #')}</p>
                         <div className="playlist-button-group">
-                            {/*<button className="button-follow" onClick={this.follow}>Follow</button>*/}
                             {followButton}
                             <OverlayTrigger trigger="click" rootClose placement="top" overlay={tracksPopover}>
                                 <button className="button-black" title="Show tracks of this playlist" >Tracks</button>

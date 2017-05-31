@@ -3,6 +3,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+/*
+ *  Component to display of the page doesn't exists
+ */
 export default class NotFoundPage extends React.Component {
   render() {
     return (

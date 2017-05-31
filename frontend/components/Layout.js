@@ -5,7 +5,9 @@ import Menu from './Menu';
 import cookie from 'react-cookie';
 import fetch from 'isomorphic-fetch';
 
-
+/*
+ * Layout component holding the menu and the main content wrapper
+ */
 export default class Layout extends React.Component {
     constructor(props) {
         super(props);

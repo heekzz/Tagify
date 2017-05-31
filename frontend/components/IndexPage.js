@@ -4,7 +4,9 @@ import React from 'react';
 
 import SearchField from './SearchField';
 
-
+/*
+ * Component for the index page that either shows the login dialog or the search field
+ */
 export default class IndexPage extends React.Component {
 
 
