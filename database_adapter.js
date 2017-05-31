@@ -29,7 +29,6 @@ var addPlaylist = function (playlist) {
     incrementUses(playlist['tags']);
 };
 
-// TODO: what if playlist doesn't exist?
 var removePlaylist = function (id) {
     getTagsOfPlaylist(id).then(function (tags) {
         decrementUses(tags);
@@ -41,7 +40,6 @@ var getPlaylists = function (user_id) {
     return Playlists.find({user_id:user_id}).toArray()
 };
 
-// TODO: should require all tags?
 var matchingPlaylists = function (tags) {
     return Playlists.find({tags: {$in: tags}}).toArray()
 };
@@ -62,9 +60,7 @@ var tagExists = function (tag) {
 
 var decrementUses = function (tags) {
     tags.forEach(function (tag) {
-        console.log("tag: " + tag);
         Tags.findOneAndUpdate({tag:tag}, { $inc: { uses: -1} },{returnNewDocument:true, upsert:false}).then(function (err, doc) {
-            console.log(doc);
             Tags.deleteOne({tag:tag, uses:0});
         });
     });

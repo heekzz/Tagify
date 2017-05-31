@@ -39,8 +39,6 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
 
-const stateKey = 'spotify_auth_state';
-
 let app = express();
 
 app.use(express.static(path.join(__dirname ,'frontend', 'public')))
@@ -60,8 +58,7 @@ app.use(passport.initialize());
 // .. also support for Passport persistent login sessions
 app.use(passport.session());
 
-app.get('/', function (req, res) {
-    // console.log("Access code: " + spotify_access_token);
+app.get('/', function (req, res) {;
     res.render('index')
 });
 
@@ -299,6 +296,8 @@ app.get('/callback', passport.authenticate('spotify', {failureRedirect: '/'}),
         res.redirect('/');
     });
 
+
+// Not used anymore
 app.get('/refresh_token', function(req, res) {
 
     // requesting access token from refresh token
